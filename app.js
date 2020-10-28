@@ -1,9 +1,9 @@
 const express = require("express");
-const morgan = require('morgan')
 const app = express();
+const morgan = require('morgan')
 
-const tourRouter = require('./routes/toursroutes')
-const userRouter = require('./routes/userroutes')
+const tourRouter = require('./routes/toursRoutes')
+const userRouter = require('./routes/userRoutes')
 
 //morgan is used to log the request in our terminal
 app.use(morgan('dev'))
