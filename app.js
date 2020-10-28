@@ -1,6 +1,10 @@
 const fs = require("fs");
 const express = require("express");
+const morgan=require('morgan')
 const app = express();
+
+//morgan is used to log the request in our terminal
+app.use(morgan('dev'))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -81,17 +85,17 @@ const deleteTour = (req, res) => {
 };
 
 /**get all the tours */
-// app.get('/api/v1/tours', getAllTour)
+app.get('/api/v1/tours', getAllTour)
 /**get tours by specific id */
-// app.get('/api/v1/tours/:id', getTourById)
+app.get('/api/v1/tours/:id', getTourById)
 /**create a new tour */
-// app.post('/api/v1/tours', createNewTour)
+app.post('/api/v1/tours', createNewTour)
 /**delete a tour by id */
-// app.delete('/api/v1/tours/:id', deleteTour)
+app.delete('/api/v1/tours/:id', deleteTour)
 
-app.route("/api/v1/tours").get(getAllTour).post(createNewTour);
-app.route("/api/v1/tours/:id").get(getTourById).delete(deleteTour);
+// app.route("/api/v1/tours").get(getAllTour).post(createNewTour);
+// app.route("/api/v1/tours/:id").get(getTourById).delete(deleteTour);
 
 app.listen(4000, () => {
-  console.log("server started");
+  console.log("serve started");
 });
