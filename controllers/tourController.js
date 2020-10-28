@@ -5,6 +5,8 @@ const tours = JSON.parse(
     fs.readFileSync(__dirname + "/../dev-data/data/tours-simple.json", "utf-8")
 );
 
+//** MIDDLEWARES  */
+
 //we are checking the valid id before hitting the request
 const checkId = (req, res, next, val) => {
     // console.log(`tour id is:${val}`);
