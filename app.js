@@ -8,8 +8,7 @@ app.use(express.urlencoded({ extended: true }))
 //tours is an array of all tours available
 const tours = JSON.parse(fs.readFileSync(__dirname + '/dev-data/data/tours-simple.json', 'utf-8'))
 
-/**get all the tours */
-app.get('/api/v1/tours', (req, res) => {
+const getAllTour= (req, res) => {
     res.status(200).json({
         //JSend method
         status: 'success',
@@ -18,14 +17,12 @@ app.get('/api/v1/tours', (req, res) => {
             tours: tours
         }
     })
-})
+}
 
-/**get tours by specific id */
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTourById= (req, res) => {
     const id = req.params.id * 1 // to convert a string to num
     const tour = tours.find(el => el.id === id)
     //to handle the error if the user has enter the id greater than tours array
-
     // if(id>tours.length) {
     if (!tour) {
         return res.status(404).json({
@@ -33,7 +30,6 @@ app.get('/api/v1/tours/:id', (req, res) => {
             message: 'invalid id'
         })
     }
-
     res.status(200).json({
         //JSend method
         status: 'success',
@@ -41,21 +37,17 @@ app.get('/api/v1/tours/:id', (req, res) => {
             tour: tour
         }
     })
-})
+}
 
-
-/**create a new tour */
-app.post('/api/v1/tours', (req, res) => {
+const createNewTour= (req, res) => {
     console.log(req.body);
     // to make id for new tour 
     const newid = tours[tours.length - 1].id + 1;
-
     // create new tour
     // object.assign  make a new object by joining two existing object
     const newTour = Object.assign({ id: newid }, req.body)
     // console.log(newTour);
     tours.push(newTour)
-
     fs.writeFile(__dirname + '/dev-data/data/tours-simple.json', JSON.stringify(tours), (err) => {
         if (err) return console.log('ERROR 💥');
         res.status(201).json({
@@ -65,10 +57,9 @@ app.post('/api/v1/tours', (req, res) => {
             }
         })
     })
-})
+}
 
-/**delete a tour by id */
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteTour=(req, res) => {
     const id = req.params.id * 1;
     if (id > tours.length) {
         return res.status(404).json({
@@ -81,7 +72,19 @@ app.delete('/api/v1/tours/:id', (req, res) => {
         status: 'success',
         data: null
     })
-})
+}
+
+/**get all the tours */
+app.get('/api/v1/tours',getAllTour)
+/**get tours by specific id */
+app.get('/api/v1/tours/:id',getTourById)
+/**create a new tour */
+app.post('/api/v1/tours',createNewTour)
+/**delete a tour by id */
+app.delete('/api/v1/tours/:id',deleteTour )
+
+
+
 app.listen(4000, () => {
     console.log('server started');
 })
