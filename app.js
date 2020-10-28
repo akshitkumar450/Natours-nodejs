@@ -11,16 +11,9 @@ app.use(morgan('dev'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
-
-
 //** ROUTERS */
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)
-
-
-
 
 // app.route("/api/v1/tours")
 //   .get(getAllTour)
@@ -29,6 +22,4 @@ app.use('/api/v1/users', userRouter)
 //   .get(getTourById)
 //   .delete(deleteTour);
 
-app.listen(4000, () => {
-  console.log("serve started");
-});
+module.exports = app;
