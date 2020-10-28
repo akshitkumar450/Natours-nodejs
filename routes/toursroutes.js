@@ -1,14 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const { getAllTour, getTourById, createNewTour, deleteTour,checkId } = require('../controllers/tourController')
+const { getAllTour, getTourById, createNewTour, deleteTour,checkId,checkBody } = require('../controllers/tourController')
 
-// param method for error hadndling
+// param middleware method for error hadndling
 //we are checking the valid id before hitting the request
 router.param('id',checkId)
 
 router.get('/', getAllTour)
 router.get('/:id', getTourById)
-router.post('/', createNewTour)
+// while creating new user check it has name  or not if not send 400 error request
+router.post('/',checkBody,createNewTour)
 router.delete('/:id', deleteTour)
 
 module.exports = router

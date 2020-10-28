@@ -6,7 +6,7 @@ const tourRouter = require('./routes/toursRoutes')
 const userRouter = require('./routes/userRoutes')
 
 //morgan is used to log the request in our terminal
-app.use(morgan('dev'))
+// app.use(morgan('dev'))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
