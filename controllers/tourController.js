@@ -4,9 +4,11 @@ const fs = require('fs')
 const tours = JSON.parse(
     fs.readFileSync(__dirname + "/../dev-data/data/tours-simple.json", "utf-8")
 );
+
+//we are checking the valid id before hitting the request
 const checkId = (req, res, next, val) => {
     console.log(`tour id is:${val}`);
-    if (id > tours.length) {
+    if (req.params.id * 1 > tours.length) {
         return res.status(404).json({
             status: "fail",
             message: "invalid id",
@@ -27,6 +29,9 @@ const getAllTour = (req, res) => {
 };
 
 const getTourById = (req, res) => {
+    const id = req.params.id * 1; // to convert a string to num
+    const tour = tours.find((el) => el.id === id);
+    //to handle the error if the user has enter the id greater than tours array
 
     res.status(200).json({
         //JSend method
