@@ -1,24 +1,5 @@
-// const fs = require('fs')
 const Tour=require('../models/tourModel')
 
-//tours is an array of all tours available
-// const tours = JSON.parse(
-//     fs.readFileSync(__dirname + "/../dev-data/data/tours-simple.json", "utf-8")
-// );
-
-//** MIDDLEWARES  */
-
-// we are checking the valid id before hitting the request
-// const checkId = (req, res, next, val) => {
-//     // console.log(`tour id is:${val}`);
-//     if (req.params.id * 1 > tours.length) {
-//         return res.status(404).json({
-//             status: "fail",
-//             message: "invalid id",
-//         });
-//     }
-//     next()
-// }
 // to check whether the new user has the name or not
 const checkBody = (req, res, next) => {
     if (!req.body.name) {

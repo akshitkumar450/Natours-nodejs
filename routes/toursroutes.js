@@ -9,6 +9,7 @@ const { getAllTour, getTourById, createNewTour, deleteTour,checkId,checkBody } =
 
 router.get('/', getAllTour)
 router.get('/:id', getTourById)
+
 // while creating new user check it has name  or not if not send 400 error request
 //checkbody is a middleware ,which check whether a new user has a name or not
 router.post('/',checkBody,createNewTour)
