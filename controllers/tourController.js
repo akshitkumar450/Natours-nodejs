@@ -1,15 +1,5 @@
 const Tour=require('../models/tourModel')
 
-// to check whether the new user has the name or not
-const checkBody = (req, res, next) => {
-    if (!req.body.name) {
-        return res.status(400).json({
-            status: 'fail',
-            message: 'name is missing'
-        })
-    }
-    next()
-}
 
 const getAllTour = (req, res) => {
     res.status(200).json({
