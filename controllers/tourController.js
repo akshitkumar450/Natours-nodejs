@@ -1,5 +1,4 @@
-const Tour=require('../models/tourModel')
-
+const Tour = require('../models/tourModel')
 
 const getAllTour = (req, res) => {
     res.status(200).json({
@@ -26,25 +25,28 @@ const getTourById = (req, res) => {
     // });
 };
 
-const createNewTour = (req, res) => {
-    // // console.log(req.body);
-    // // to make id for new tour
-    // const newid = tours[tours.length - 1].id + 1;
-    // // create new tour
-    // // object.assign  make a new object by joining two existing object
-    // const newTour = Object.assign({ id: newid }, req.body);
-    // // console.log(newTour);
-    // tours.push(newTour);
-    // fs.writeFile(__dirname + "/../dev-data/data/tours-simple.json", JSON.stringify(tours), (err) => {
-    //     if (err) return console.log("ERROR 💥");
-    //     res.status(201).json({
-    //         status: "success",
-    //         data: {
-    //             tour: newTour,
-    //         }
-    //     });
-    // }
-    // );
+const createNewTour = async (req, res) => {
+    try {
+
+        // const newTour=new Tour({})
+        // newTour.save()
+
+        //use above 2 line to store a new data or just use create method shown below
+        const newTour = await Tour.create(req.body)
+        res.status(201).json({
+            status: "success",
+            data: {
+                tour: newTour,
+            }
+        });
+    } catch (err) {
+        res.status(400).json({
+            status: "fail",
+            message: "ERROR 💥,INVALID DATA SENT"
+        })
+    }
+
+
 };
 
 const deleteTour = (req, res) => {
@@ -60,6 +62,4 @@ module.exports = {
     getTourById,
     deleteTour,
     createNewTour,
-    checkId,
-    checkBody
 }
