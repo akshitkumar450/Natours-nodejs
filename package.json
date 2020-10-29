@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": " node server.js"
+    "start": " nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,5 +13,8 @@
     "express": "^4.17.1",
     "mongoose": "^5.10.11",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }
