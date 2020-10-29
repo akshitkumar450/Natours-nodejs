@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+// used to log the request in terminal
 const morgan = require('morgan')
 
 const tourRouter = require('./routes/toursRoutes')
