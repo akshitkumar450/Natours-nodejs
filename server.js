@@ -1,5 +1,5 @@
-const dotenv = require('dotenv')
 const mongoose = require('mongoose')
+const dotenv = require('dotenv')
 // to reading the env file
 //config should be efore app 
 dotenv.config({ path: './config.env' })

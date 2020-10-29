@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 // defining a schema for our tours
 const tourSchema = new mongoose.Schema({
     name: {

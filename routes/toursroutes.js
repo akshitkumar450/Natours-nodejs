@@ -4,7 +4,8 @@ const { getAllTour, getTourById, createNewTour, deleteTour,checkId,checkBody } =
 
 // param middleware method for error hadndling
 //we are checking the valid id before hitting the request
-router.param('id',checkId)
+
+// router.param('id',checkId)
 
 router.get('/', getAllTour)
 router.get('/:id', getTourById)
