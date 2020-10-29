@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { getAllTour, getTourById, createNewTour, deleteTour } = require('../controllers/tourController')
+const { getAllTour, getTourById, createNewTour, deleteTour,updateTour } = require('../controllers/tourController')
 
 router.get('/', getAllTour)
 router.get('/:id', getTourById)
@@ -9,5 +9,6 @@ router.get('/:id', getTourById)
 //checkbody is a middleware ,which check whether a new user has a name or not
 router.post('/',createNewTour)
 router.delete('/:id', deleteTour)
+router.patch('/:id', updateTour)
 
 module.exports = router

@@ -21,7 +21,7 @@ const getAllTour = async (req, res) => {
 
 const getTourById = async (req, res) => {
     try {
-        const tour = await Tour.findById( req.params.id )
+        const tour = await Tour.findById(req.params.id)
         // const tour = await Tour.findOne({ _id: req.params.id })
         res.status(200).json({
             status: "success",
@@ -44,7 +44,6 @@ const createNewTour = async (req, res) => {
 
         // const newTour=new Tour({})
         // newTour.save()
-
         //use above 2 line to store a new data or just use create method shown below
         const newTour = await Tour.create(req.body)
         res.status(201).json({
@@ -59,13 +58,32 @@ const createNewTour = async (req, res) => {
             message: "ERROR 💥,INVALID DATA SENT"
         })
     }
-
-
 };
+
+const updateTour = async (req, res) => {
+    try {
+        const updatedTour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true
+        })
+        res.status(200).json({
+            status: "success",
+            data: {
+                tour: updatedTour
+            }
+        });
+    }
+    catch (err) {
+        res.status(404).json({
+            status: "error",
+            message: 'updating failed'
+        });
+    }
+
+}
 
 const deleteTour = (req, res) => {
     res.status(204).json({
-        //JSend method
         status: "success",
         data: null,
     });
@@ -76,4 +94,5 @@ module.exports = {
     getTourById,
     deleteTour,
     createNewTour,
+    updateTour
 }
