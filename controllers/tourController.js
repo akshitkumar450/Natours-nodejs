@@ -1,28 +1,42 @@
 const Tour = require('../models/tourModel')
 
-const getAllTour = (req, res) => {
-    res.status(200).json({
-        //JSend method
-        // status: "success",
-        // result: tours.length,
-        // data: {
-        //     tours: tours,
-        // },
-    });
+const getAllTour = async (req, res) => {
+    try {
+        const tours = await Tour.find()
+        res.status(200).json({
+            status: "success",
+            result: tours.length,
+            data: {
+                tours: tours,
+            }
+        });
+    }
+    catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: 'could not find tours'
+        });
+    }
 };
 
-const getTourById = (req, res) => {
-    const id = req.params.id * 1; // to convert a string to num
-    // const tour = tours.find((el) => el.id === id);
-    // //to handle the error if the user has enter the id greater than tours array
+const getTourById = async (req, res) => {
+    try {
+        const tour = await Tour.findById( req.params.id )
+        // const tour = await Tour.findOne({ _id: req.params.id })
+        res.status(200).json({
+            status: "success",
+            data: {
+                tour: tour,
+            },
+        });
 
-    // res.status(200).json({
-    //     //JSend method
-    //     status: "success",
-    //     data: {
-    //         tour: tour,
-    //     },
-    // });
+    } catch (err) {
+        res.status(404).json({
+            status: "fail",
+            message: 'id is not valid'
+        });
+    }
+
 };
 
 const createNewTour = async (req, res) => {
