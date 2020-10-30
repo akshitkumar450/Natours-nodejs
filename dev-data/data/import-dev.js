@@ -19,17 +19,19 @@ mongoose.connect(DB, {
 //read json file
 const tours = JSON.parse(fs.readFileSync(__dirname + '/tours-simple.json', 'utf-8'))
 
+
+//insert all data to DB from json file
 async function importData() {
     try {
         await Tour.create(tours)
         console.log('data successfully loaded');
-        process.exit()
     } catch (err) {
         console.log(err);
     }
+    process.exit()
 }
-//delete all data from DB
 
+//delete all data from DB
 async function deleteData() {
     try {
         await Tour.deleteMany()
@@ -37,7 +39,9 @@ async function deleteData() {
     } catch (err) {
         console.log(err);
     }
+    process.exit()
 }
+
 if (process.argv[2] === '--import') {
     importData()
 } if (process.argv[2] === '--delete') {

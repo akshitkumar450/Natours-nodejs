@@ -2,7 +2,22 @@ const Tour = require('../models/tourModel')
 
 const getAllTour = async (req, res) => {
     try {
-        const tours = await Tour.find()
+        // shallow copy of req.query object
+        // using ... we take the copy of req.query and using {...req.query } we create a new objects
+        const queryObj = { ...req.query }
+        //**excluding spl fieldsa name from our query */
+        const excludedFields = ['page', 'sort', 'limit', 'fields']
+        excludedFields.forEach(el => {
+            delete queryObj[el]
+        })
+
+        //**FOR QUERYING */
+        const query = Tour.find(queryObj)
+        const tours=await query
+
+        //** FOR QUERYING  */
+        // const query = await Tour.find().where('duration').equals(5).where('difficulty').equals('easy')
+
         res.status(200).json({
             status: "success",
             result: tours.length,
@@ -84,7 +99,7 @@ const updateTour = async (req, res) => {
 const deleteTour = async (req, res) => {
 
     try {
-       await Tour.findByIdAndDelete(req.params.id)
+        await Tour.findByIdAndDelete(req.params.id)
         res.status(200).json({
             status: "success",
             data: null
