@@ -10,13 +10,26 @@ const getAllTour = async (req, res) => {
         excludedFields.forEach(el => {
             delete queryObj[el]
         })
+        //** ADVANCED FILTERING */
+        // for eg- if we want to search rating gte=5
+        // {difficulty:'easy',rating:{$gte:5}}
+
+        // we write query for searching gte,gt,lte,lt 
+        //  /api/v1/tours?duration[lte]=5&difficulty=easy
+
+        let queryStr = JSON.stringify(queryObj)
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => {
+            return `$${match}`
+        })
+        console.log(JSON.parse(queryStr));
 
         //**FOR QUERYING */
-        const query = Tour.find(queryObj)
-        const tours=await query
+        const query = Tour.find(JSON.parse(queryStr))
+        const tours = await query
 
         //** FOR QUERYING  */
-        // const query = await Tour.find().where('duration').equals(5).where('difficulty').equals('easy')
+        // another way 
+        // const query = Tour.find().where('duration').equals(5).where('difficulty').equals('easy')
 
         res.status(200).json({
             status: "success",
