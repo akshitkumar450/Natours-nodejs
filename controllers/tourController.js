@@ -2,15 +2,20 @@ const Tour = require('../models/tourModel')
 
 const getAllTour = async (req, res) => {
     try {
+
+        console.log(req.query);
         // shallow copy of req.query object
         // using ... we take the copy of req.query and using {...req.query } we create a new objects
+
+        //**1a  FILTERING */
         const queryObj = { ...req.query }
         //**excluding spl fieldsa name from our query */
         const excludedFields = ['page', 'sort', 'limit', 'fields']
         excludedFields.forEach(el => {
             delete queryObj[el]
         })
-        //** ADVANCED FILTERING */
+
+        //**1b ADVANCED FILTERING */
         // for eg- if we want to search rating gte=5
         // {difficulty:'easy',rating:{$gte:5}}
 
@@ -19,7 +24,7 @@ const getAllTour = async (req, res) => {
 
         // we have converted our req.query in such a way that it turns to be mongoose query
         // convert [gte],[gt],[lte],[lt] from req.query to $gte,$ge,$lte,$lt
-        
+
         let queryStr = JSON.stringify(queryObj)
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => {
             return `$${match}`
@@ -27,8 +32,26 @@ const getAllTour = async (req, res) => {
 
         // console.log(JSON.parse(queryStr));
 
+        //** 2 sorting */
+
+
         //**FOR QUERYING */
-        const query = Tour.find(JSON.parse(queryStr))
+        let query = Tour.find(JSON.parse(queryStr))
+
+
+        if (req.query.sort) {
+            // this is used if we have to sort on the ,multiple fields ,,
+            //  localhost:4000/api/v1/tours?sort=-price,-ratingsAverage
+            // to convert the req.query to -> sort( price,ratingsAverage)
+            const sortBy = req.query.sort.split(',').join(' ')
+            query = query.sort(sortBy)
+        } else{
+            //default sorting on the basis of createdAt field
+            query=query.sort('-createdAt')
+        }
+
+
+        // we have use this because we want to have multiple filters 
         const tours = await query
 
         //** FOR QUERYING  */

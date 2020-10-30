@@ -31,11 +31,11 @@ const tourSchema = new mongoose.Schema({
         trim: true,
         required: [true, 'a tour must have a desctipon']
     },
-    ratingAverage: {
+    ratingsAverage: {
         type: Number,
         default: 4.5
     },
-    ratingQuantity: {
+    ratingsQuantity: {
         type: Number,
         default: 0
     },
