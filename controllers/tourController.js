@@ -41,7 +41,6 @@ const getTourById = async (req, res) => {
 
 const createNewTour = async (req, res) => {
     try {
-
         // const newTour=new Tour({})
         // newTour.save()
         //use above 2 line to store a new data or just use create method shown below
@@ -55,7 +54,7 @@ const createNewTour = async (req, res) => {
     } catch (err) {
         res.status(400).json({
             status: "fail",
-            message: "ERROR 💥,INVALID DATA SENT"
+            message: err
         })
     }
 };

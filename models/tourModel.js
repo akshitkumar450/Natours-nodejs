@@ -4,20 +4,59 @@ const tourSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'a tour name is missing'],
-        unique: true
+        unique: true,
+        trim: true
+    },
+    duration: {
+        type: Number,
+        required: [true, 'a tour must have duration']
+    },
+    maxGroupSize: {
+        type: Number,
+        required: [true, 'a must have a group size']
+    },
+    difficulty: {
+        type: String,
+        required: [true, 'must have a difficulty']
     },
     price: {
         type: Number,
-        // it is validator 
         required: [true, 'a tour price is missing']
     },
-    rating: {
+    priceDiscount: {
+        type: Number,
+    },
+    summary: {
+        type: String,
+        trim: true,
+        required: [true, 'a tour must have a desctipon']
+    },
+    ratingAverage: {
         type: Number,
         default: 4.5
-    }
+    },
+    ratingQuantity: {
+        type: Number,
+        default: 0
+    },
+    description: {
+        type: String,
+        trim: true
+    },
+    imageCover: {
+        type: String,
+        required: [true, 'a tour must have images']
+    },
+    images: [String],
+    createdAt: {
+        type: Date,
+        default: Date.now()
+    },
+    startDates: [Date]
+
 })
 
 // creating a model for our DB
 const Tour = mongoose.model('Tour', tourSchema)
 
-module.exports=Tour
+module.exports = Tour
