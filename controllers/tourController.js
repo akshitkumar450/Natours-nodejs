@@ -17,11 +17,15 @@ const getAllTour = async (req, res) => {
         // we write query for searching gte,gt,lte,lt 
         //  /api/v1/tours?duration[lte]=5&difficulty=easy
 
+        // we have converted our req.query in such a way that it turns to be mongoose query
+        // convert [gte],[gt],[lte],[lt] from req.query to $gte,$ge,$lte,$lt
+        
         let queryStr = JSON.stringify(queryObj)
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => {
             return `$${match}`
         })
-        console.log(JSON.parse(queryStr));
+
+        // console.log(JSON.parse(queryStr));
 
         //**FOR QUERYING */
         const query = Tour.find(JSON.parse(queryStr))
