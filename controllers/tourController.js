@@ -1,5 +1,13 @@
 const Tour = require('../models/tourModel')
 
+// prefilling some properties of req.query
+const aliasTopTous = (req, res, next) => {
+    req.query.limit = '5'
+    req.query.sort = '-ratingsAverage,price'
+    req.query.fields = 'name,duration,price'
+    next()
+}
+
 const getAllTour = async (req, res) => {
     try {
 
@@ -65,13 +73,12 @@ const getAllTour = async (req, res) => {
         const limit = req.query.limit * 1 || 100
         const skipVal = (page - 1) * limit
         query = query.skip(skipVal).limit(limit)
-        if(req.query.page){
-            const numTours=await Tour.countDocuments()
-            if(skipVal>= numTours) {
+        if (req.query.page) {
+            const numTours = await Tour.countDocuments()
+            if (skipVal >= numTours) {
                 throw new Error('this page does not exist')
             }
         }
-        
 
         // we have use this because we want to have multiple filters ...so await after finding fields
         const tours = await query
@@ -181,5 +188,6 @@ module.exports = {
     getTourById,
     deleteTour,
     createNewTour,
-    updateTour
+    updateTour,
+    aliasTopTous
 }
