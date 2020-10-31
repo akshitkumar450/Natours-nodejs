@@ -174,10 +174,12 @@ const getMonthlyPlan = async (req, res) => {
           }
         },
         {
+            // add month as same value as id
           $addFields: { month: '$_id' }
         },
         {
           $project: {
+              // 0 it will not show
             _id: 0
           }
         },
