@@ -32,37 +32,34 @@ const getAllTour = async (req, res) => {
 
         // console.log(JSON.parse(queryStr));
 
-        //** 2 sorting */
-
-
-        //**FOR QUERYING */
+         //**FOR QUERYING */
         // we cant use methods like sort,select(limit fiedls)  bcz these method apply on the object that is returned by find method
         let query = Tour.find(JSON.parse(queryStr))
 
+        //** 2 sorting */
+
+       
 
         if (req.query.sort) {
             // this is used if we have to sort on the ,multiple fields 
             //  localhost:4000/api/v1/tours?sort=-price,-ratingsAverage
-            // to convert the req.query to -> sort('price,ratingsAverage' )
+            // to convert the req.query to -> sort('price ratingsAverage' )
             const sortBy = req.query.sort.split(',').join(' ')
             query = query.sort(sortBy)
-        } else{
+        } else {
             //default sorting on the basis of createdAt field
-            query=query.sort('-createdAt')
+            query = query.sort('-createdAt')
         }
 
-    //**3 LIMITING FIELDS */
+        //**3 LIMITING FIELDS */
 
-    if(req.query.fields){
-        const field=req.query.fields.split(',').join(' ');
-        query=query.select(field)
-    } else{
-        // excluding fields
-        query=query.select('-__v')
-    }
-
-
-
+        if (req.query.fields) {
+            const field = req.query.fields.split(',').join(' ');
+            query = query.select(field)
+        } else {
+            // excluding fields
+            query = query.select('-__v')
+        }
 
         // we have use this because we want to have multiple filters ...so await after finding fields
         const tours = await query
