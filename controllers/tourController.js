@@ -114,6 +114,7 @@ const getTourStats = async (req, res) => {
     try {
         const stats = await Tour.aggregate([
             {
+                // match through it 
                 $match: { ratingsAverage: { $gte: 4.5 } }
             },
             {
@@ -128,6 +129,7 @@ const getTourStats = async (req, res) => {
                 }
             },
             {
+                // 1 for ascending
                 $sort: { avgPrice: 1 }
             }
             // {
