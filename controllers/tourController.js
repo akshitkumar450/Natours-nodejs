@@ -32,14 +32,11 @@ const getAllTour = async (req, res) => {
 
         // console.log(JSON.parse(queryStr));
 
-         //**FOR QUERYING */
+        //**FOR QUERYING */
         // we cant use methods like sort,select(limit fiedls)  bcz these method apply on the object that is returned by find method
         let query = Tour.find(JSON.parse(queryStr))
 
         //** 2 sorting */
-
-       
-
         if (req.query.sort) {
             // this is used if we have to sort on the ,multiple fields 
             //  localhost:4000/api/v1/tours?sort=-price,-ratingsAverage
@@ -60,6 +57,21 @@ const getAllTour = async (req, res) => {
             // excluding fields
             query = query.select('-__v')
         }
+
+        //**4 pagination  */
+
+        // ?page=2&limit=10
+        const page = req.query.page * 1 || 1
+        const limit = req.query.limit * 1 || 100
+        const skipVal = (page - 1) * limit
+        query = query.skip(skipVal).limit(limit)
+        if(req.query.page){
+            const numTours=await Tour.countDocuments()
+            if(skipVal>= numTours) {
+                throw new Error('this page does not exist')
+            }
+        }
+        
 
         // we have use this because we want to have multiple filters ...so await after finding fields
         const tours = await query
