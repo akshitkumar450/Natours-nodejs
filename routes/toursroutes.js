@@ -5,7 +5,7 @@ const { getAllTour, getTourById, createNewTour, deleteTour, updateTour, aliasTop
 
 router.get('/top-5-cheap', aliasTopTous, getAllTour)
 router.get('/tour-stats', getTourStats)
-router.get('/monthly-plan/:id', getMonthlyPlan)
+router.get('/monthly-plan/:year', getMonthlyPlan)
 router.get('/', getAllTour)
 router.get('/:id', getTourById)
 
