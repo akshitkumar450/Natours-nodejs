@@ -7,7 +7,9 @@ const tourSchema = new mongoose.Schema(
             type: String,
             required: [true, 'a tour name is missing'],
             unique: true,
-            trim: true
+            trim: true,
+            maxlength:[40,'name length exceed the limit'],
+            minlength:[10,'name length is not sufficeint']
         },
         duration: {
             type: Number,
@@ -35,7 +37,9 @@ const tourSchema = new mongoose.Schema(
         },
         ratingsAverage: {
             type: Number,
-            default: 4.5
+            default: 4.5,
+            min:[0,'rating must be greater than 0'],
+            max:[5,'rating must be lesser than 5']
         },
         ratingsQuantity: {
             type: Number,
