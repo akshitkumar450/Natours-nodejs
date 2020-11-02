@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const ApiErrors = require('./utils/apiErrors')
+const globalErrorHandler = require('./controllers/errorControllers')
 // used to log the request in terminal
 const morgan = require('morgan')
 
@@ -27,23 +29,19 @@ app.all('*', (req, res, next) => {
     //     status: 'fail',
     //     message: `can't access the ${req.originalUrl} `
     // })
-    const err = new Error(`can't access the ${req.originalUrl} `)
-    err.statusCode = 404
-    err.status = 'fail'
-    next(err)
+
+    // const err = new Error(`can't access the ${req.originalUrl} `)
+    // err.statusCode = 404
+    // err.status = 'fail'
+    // next(err)
+
+    // using inheritance from class ApiErrors
+
+    next(new Error(`can't access the ${req.originalUrl} `, 404))
 })
 
 // global error handling middleware
-
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500
-    err.status = err.status || 'error'
-    res.status(err.statusCode).json({
-        status: err.status,
-        message: err.message
-    })
-
-})
+app.use(globalErrorHandler)
 
 
 
