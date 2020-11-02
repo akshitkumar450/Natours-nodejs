@@ -91,9 +91,11 @@ tourSchema.pre('save', function (next) {
 // })
 
 // QUery middleware 
-//this refers to the current query
 
+//this refers to the current query
 // tourSchema.pre('find', function (next) {
+
+//  /^find/-> means anything starting with find
 tourSchema.pre(/^find/, function (next) {
     this.find({ secretTour: { $ne: true } })
     this.start = Date.now()
