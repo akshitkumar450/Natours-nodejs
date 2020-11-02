@@ -52,7 +52,14 @@ const getTourById = async (req, res) => {
 
 };
 
-const createNewTour = async (req, res) => {
+// catchAsyncError retunrs a promise which can be handled by catch block if there is any error 
+const catchAsyncError = (fn) => {
+    return (req, res, next) => {
+        fn(req, res, next).catch(next)
+    }
+}
+
+const createNewTour =catchAsyncError( async (req, res) => {
     try {
         // const newTour=new Tour({})
         // newTour.save()
@@ -70,7 +77,7 @@ const createNewTour = async (req, res) => {
             message: err
         })
     }
-};
+});
 
 const updateTour = async (req, res) => {
     try {
