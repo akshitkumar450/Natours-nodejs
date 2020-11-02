@@ -25,28 +25,11 @@ app.use('/api/v1/users', userRouter)
 // if are able to run below code that means the req res cycle is not completes
 
 app.all('*', (req, res, next) => {
-    // res.status(404).json({
-    //     status: 'fail',
-    //     message: `can't access the ${req.originalUrl} `
-    // })
-
-    // const err = new Error(`can't access the ${req.originalUrl} `)
-    // err.statusCode = 404
-    // err.status = 'fail'
-    // next(err)
-
-    // using inheritance from class ApiErrors
-
     next(new ApiErrors(`can't access the ${req.originalUrl} `, 404))
 })
 
 // global error handling middleware
 app.use(globalErrorHandler)
-
-
-
-
-
 
 
 module.exports = app;
