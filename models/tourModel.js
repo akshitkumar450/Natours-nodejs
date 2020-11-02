@@ -102,8 +102,18 @@ tourSchema.pre(/^find/, function (next) {
     next()
 })
 tourSchema.post(/^find/, function (docs, next) {
+    //docs-> is all the document that get reutnred from query
     console.log(docs);
     console.log(`query take ${Date.now() - this.start} ms`);
+    next()
+})
+
+// aggregation middleware
+
+tourSchema.pre('aggregate', function (next) {
+    //  to exclude secretTour from aggregate fn ,we just need to add another method before $match
+    this.pipeline().unshift({ $match: { secretTour: { $ne: true } } })  // this exclude the secretTour from output
+    console.log(this.pipeline()); // this is an array  
     next()
 })
 
