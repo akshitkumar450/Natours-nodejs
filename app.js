@@ -37,7 +37,7 @@ app.all('*', (req, res, next) => {
 
     // using inheritance from class ApiErrors
 
-    next(new Error(`can't access the ${req.originalUrl} `, 404))
+    next(new ApiErrors(`can't access the ${req.originalUrl} `, 404))
 })
 
 // global error handling middleware
