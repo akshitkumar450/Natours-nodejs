@@ -204,7 +204,7 @@ const getMonthlyPlan = async (req, res) => {
       });
     }
   }; 
-
+  
 module.exports = {
     getAllTour,
     getTourById,
