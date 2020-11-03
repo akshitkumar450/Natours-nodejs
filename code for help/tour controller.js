@@ -55,7 +55,7 @@ const getTourById = async (req, res) => {
 // catchAsyncError retunrs a promise which can be handled by catch block if there is any error 
 const catchAsyncError = (fn) => {
     return (req, res, next) => {
-        fn(req, res, next).catch(next)
+        fn(req, res, next).catch(err=>next(err))
     }
 }
 
