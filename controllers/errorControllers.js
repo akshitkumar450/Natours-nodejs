@@ -23,12 +23,20 @@ const errorProd = (err, res) => {
     }
 
 }
+
+
 // const castErrorDB = (err) => {
 //     const message = `invalid ${err.path} : ${err.value}`
 //     return new apiError(message, 400)
 // }
 
 
+const handleDuplicateFieldsDB = (err) => {
+    const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+    console.log(value);
+    const message = `Duplicate field value: ${value}. Please use another value!`;
+    return new AppError(message, 400);
+};
 
 function globalErrorHandler(err, req, res, next) {
     // console.log(err.stack);
@@ -38,9 +46,15 @@ function globalErrorHandler(err, req, res, next) {
     if (process.env.NODE_ENV === 'development') {
         errorDev(err, res)
     } else if (process.env.NODE_ENV === 'production') {
-        // let error = { ...err }
+        let error = { ...err }
+        console.log(error, '******');
+        // for error handling invalid id 
         // if (error.name === 'CastError') error = castErrorDB(error)
-        errorProd(err, res)
+
+        // for handling duplicate name while creating a new tour
+        if (err.code = '11000') error = handleDuplicateFieldsDB(error)
+        errorProd(error, res)
+
     }
 }
 
