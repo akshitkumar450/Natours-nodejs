@@ -1,3 +1,5 @@
+const apiError = require('../utils/apiErrors')
+
 const errorDev = (err, res) => {
     res.status(err.statusCode).json({
         status: err.status,
@@ -21,6 +23,10 @@ const errorProd = (err, res) => {
     }
 
 }
+const castErrorDB = (err) => {
+    const message = `invalid ${err.path} : ${err.value}`
+    return new apiError(message, 400)
+}
 
 
 
@@ -32,7 +38,9 @@ function globalErrorHandler(err, req, res, next) {
     if (process.env.NODE_ENV === 'developement') {
         errorDev(err, res)
     } else if (process.env.NODE_ENV === 'production') {
-        errorProd(err, res)
+        let error = { ...err }
+        if (error.name === 'CastError') error = castErrorDB(error)
+        errorProd(error, res)
     }
 }
 
