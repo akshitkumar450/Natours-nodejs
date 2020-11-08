@@ -80,6 +80,11 @@ const protect = catchAsyncError(async (req, res, next) => {
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
     console.log(decoded);
     // 3) if user still exists
+    // to check this one we first need t delete the user from DB and afte that check 
+    const freshUser = await User.findById(decoded.id)
+    if (!freshUser) {
+        return next(new ApiError('the user belongs to token does not exist'), 401)
+    }
 
     // 4)  check if the user changed the password after token was issued 
 
