@@ -1,4 +1,3 @@
-const ApiErrors = require('../utils/apiErrors');
 const apiError = require('../utils/apiErrors');
 
 const errorDev = (err, res) => {
@@ -24,10 +23,10 @@ const errorProd = (err, res) => {
   }
 };
 
-const castErrorDB = (err) => {
-  const message = `invalid ${err.path} : ${err.value}`
-  return new apiError(message, 400)
-}
+// const castErrorDB = (err) => {
+//     const message = `invalid ${err.path} : ${err.value}`
+//     return new apiError(message, 400)
+// }
 
 const handleDuplicateFieldsDB = (err) => {
   const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
@@ -43,14 +42,6 @@ const handleValidationErrorDB = (err) => {
   return new AppError(message, 400);
 };
 
-const handleToken = (err) => {
-  return new ApiErrors("invalid token please login", 401)
-}
-
-const handleExpire = (err) => {
-  return new ApiErrors('token expired. please login again ', 401)
-}
-
 function globalErrorHandler(err, req, res, next) {
   // console.log(err.stack);
   err.statusCode = err.statusCode || 500;
@@ -62,17 +53,14 @@ function globalErrorHandler(err, req, res, next) {
     let error = { ...err };
     console.log(error, '******');
     // for error handling invalid id
-    if (error.name === 'CastError') error = castErrorDB(error)
+    // if (error.name === 'CastError') error = castErrorDB(error)
 
     // for handling duplicate name while creating a new tour
-    if ((err.code === '11000')) error = handleDuplicateFieldsDB(error);
+    if ((err.code = '11000')) error = handleDuplicateFieldsDB(error);
 
     //handling validation error
     if (error.name === 'ValidationError')
       error = handleValidationErrorDB(error);
-
-    if (error.name === 'JsonWebTokenError') error = handleToken(error)
-    if (error.name === 'TokenExpiredError') error = handleExpire(error)
     errorProd(error, res);
   }
 }

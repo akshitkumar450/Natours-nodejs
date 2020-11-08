@@ -11,13 +11,10 @@ const {
   getMonthlyPlan,
 } = require('../controllers/tourController');
 
-// this is used bcz getalltours fn will be accessed to a user only if he is logged in
-const { protect } = require('./../controllers/authControllers')
-
 router.get('/top-5-cheap', aliasTopTous, getAllTour);
 router.get('/tour-stats', getTourStats);
 router.get('/monthly-plan/:year', getMonthlyPlan);
-router.get('/', protect, getAllTour);
+router.get('/', getAllTour);
 router.get('/:id', getTourById);
 
 // while creating new user check it has name  or not if not send 400 error request

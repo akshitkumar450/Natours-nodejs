@@ -1,5 +1,5 @@
-const User = require('../models/userModel');
-const catchAsyncError = require('../utils/catchAsyncError');
+const User = require('./../models/userModel');
+const catchAsyncError = require('./../utils/catchAsyncError');
 
 
 const getAllUsers = catchAsyncError(async (req, res, next) => {
@@ -12,6 +12,7 @@ const getAllUsers = catchAsyncError(async (req, res, next) => {
     },
   });
 });
+
 
 const getUserById = (req, res) => {
   res.status(500).json({

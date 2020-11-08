@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
     confirmPassword: {
         type: String,
         required: [true, ' confirm your password'],
+
+        // this is done for checking whether the password and confirm password are same or not
         validate: {
             // this will only work on CREATING OR SAVE
             validator: function (val) {
@@ -36,7 +38,7 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-// to store encrypted password in our database
+// / to store encrypted password in our database
 // we have used this bcz ,, it will run before saving into the DB .. so this is the right place to encrypt the password before saving in to database
 userSchema.pre('save', async function (next) {
     // only work if the password in not updated
@@ -47,11 +49,15 @@ userSchema.pre('save', async function (next) {
 
     // deleting the confirm password field
     this.confirmPassword = undefined
+    next()
 })
 
-// it is an instance method 
-userSchema.methods.correctPassword = function (candidatePass, userPass) {
-    return bcrypt.compare(candidatePass, userPass)
+// this is an instance method on the user model and it is avalible for all the docs created by user collection
+// passwordEnterByUser is the password enter by user and it is not hashed
+// passwordInDB is password which is hashed and in DB
+
+userSchema.methods.correctPassword = async function (passwordEnterByUser, passwordInDB) {
+    return await bcrypt.compare(passwordEnterByUser, passwordInDB)
 }
 
 const User = mongoose.model('User', userSchema)
