@@ -1,20 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const {
-  getAllTour,
-  getTourById,
-  createNewTour,
-  deleteTour,
-  updateTour,
-  aliasTopTous,
-  getTourStats,
-  getMonthlyPlan,
+  getAllTour, getTourById, createNewTour, deleteTour, updateTour, aliasTopTous, getTourStats, getMonthlyPlan,
 } = require('../controllers/tourController');
+
+// to allow only users which are login to see all tours
+const { protect } = require('./../controllers/authControllers')
+
 
 router.get('/top-5-cheap', aliasTopTous, getAllTour);
 router.get('/tour-stats', getTourStats);
 router.get('/monthly-plan/:year', getMonthlyPlan);
-router.get('/', getAllTour);
+
+router.get('/', protect, getAllTour);
 router.get('/:id', getTourById);
 
 // while creating new user check it has name  or not if not send 400 error request
