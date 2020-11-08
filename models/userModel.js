@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const bcrypt = require('bcryptjs')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -32,6 +33,18 @@ const userSchema = new mongoose.Schema({
             message: 'passwords are not same'
         }
     }
+})
+
+
+userSchema.pre('save', async function (next) {
+    // only work if the password in not updated
+    if (!this.isModified('password')) return next()
+
+    // encrypting or hashing the password  and it will retunr a promise 
+    this.password = await bcrypt.hash(this.password, 12)
+
+    // deleting the confirm password field
+    this.confirmPassword = undefined
 })
 
 const User = mongoose.model('User', userSchema)
