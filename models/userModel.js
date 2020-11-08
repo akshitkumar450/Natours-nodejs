@@ -35,7 +35,8 @@ const userSchema = new mongoose.Schema({
             },
             message: 'passwords are not same'
         }
-    }
+    },
+    passwordChangedAt: Date
 })
 
 // / to store encrypted password in our database
@@ -60,5 +61,15 @@ userSchema.methods.correctPassword = async function (passwordEnterByUser, passwo
     return await bcrypt.compare(passwordEnterByUser, passwordInDB)
 }
 
+// instance method for checking if password is changed afte the token is issued
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+    if (this.passwordChangedAt) {
+        const changeTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10)
+        // console.log(this.passwordChangedAt, JWTTimestamp);
+        return JWTTimestamp < changeTimeStamp // means password is changed
+    }
+
+    return false // means that user has not chnaged the password
+}
 const User = mongoose.model('User', userSchema)
 module.exports = User

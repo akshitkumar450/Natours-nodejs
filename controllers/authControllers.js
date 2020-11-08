@@ -78,7 +78,7 @@ const protect = catchAsyncError(async (req, res, next) => {
     // 2) verification the token
 
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
-    console.log(decoded);
+    // console.log(decoded);
     // 3) if user still exists
     // to check this one we first need t delete the user from DB and afte that check 
     const freshUser = await User.findById(decoded.id)
@@ -88,7 +88,12 @@ const protect = catchAsyncError(async (req, res, next) => {
 
     // 4)  check if the user changed the password after token was issued 
 
+    if (freshUser.changedPasswordAfter(decoded.iat)) {
+        return next(new ApiError('recently password was changed.please login again'), 401)
+    }
 
+    // grant access to PROTECTED ROUTE
+    req.user = freshUser
     next()
 
 })
