@@ -46,7 +46,7 @@ const login = catchAsyncError(async (req, res, next) => {
     const user = await User.findOne({ email: email }).select('+password')
     // correctPassword is a instance method which is avalible on all the document of user
     // const correct=await user.correctPassword(password, user.password)  -> is not correct bcz if the user if not present then this will not run
-    console.log(user);
+    // console.log(user);
     if (!user || !await user.correctPassword(password, user.password)) {
         return next(new ApiError('incorrect password or email'), 401)
     }
@@ -59,7 +59,33 @@ const login = catchAsyncError(async (req, res, next) => {
     })
 })
 
+
+const protect = catchAsyncError(async (req, res, next) => {
+
+    // 1)getting the token and check it there
+    let token
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+        token = req.headers.authorization.split(' ')[1]
+    }
+    // console.log(token);
+    if (!token) {
+        return next(new ApiError('you are not logged in'), 401)
+    }
+
+
+    // 2) verification of code
+
+
+    // 3) checl=k if user is still exists
+
+
+    // 4) check if user changed tha password after token was issued
+
+    next()
+})
+
 module.exports = {
     signup,
-    login
+    login,
+    protect
 }
