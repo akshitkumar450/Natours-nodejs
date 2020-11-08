@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, ' password should not be empty'],
-        minlength: 8
+        minlength: 8,
+        select: false
     },
     confirmPassword: {
         type: String,
@@ -47,6 +48,11 @@ userSchema.pre('save', async function (next) {
     // deleting the confirm password field
     this.confirmPassword = undefined
 })
+
+// it is an instance method 
+userSchema.methods.correctPassword = function (candidatePass, userPass) {
+    return bcrypt.compare(candidatePass, userPass)
+}
 
 const User = mongoose.model('User', userSchema)
 module.exports = User

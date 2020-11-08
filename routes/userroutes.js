@@ -8,9 +8,10 @@ const {
   deleteUser,
 } = require('../controllers/userController');
 
-const { signup } = require('./../controllers/authControllers')
+const { signup, login } = require('./../controllers/authControllers')
 
 router.post('/signup', signup)
+router.post('/login', login)
 
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
