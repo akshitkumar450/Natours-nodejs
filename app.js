@@ -5,8 +5,8 @@ const globalErrorHandler = require('./controllers/errorControllers');
 // used to log the request in terminal
 const morgan = require('morgan');
 
-const tourRouter = require('./routes/toursRoutes');
-const userRouter = require('./routes/userRoutes');
+const tourRouter = require('./routes/toursroutes');
+const userRouter = require('./routes/userroutes');
 
 //morgan is used to log the request in our terminal
 // if (process.env.NODE_ENV === 'development') {
