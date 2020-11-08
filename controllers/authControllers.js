@@ -42,7 +42,8 @@ const login = catchAsyncError(async (req, res, next) => {
     }
 
     // 2)  if user exist and password is correct    
-    const user = await User.findOne({ email }).select('+password')
+    //. select is used bcz we have excluded password in our model and + is used to include password 
+    const user = await User.findOne({ email: email }).select('+password')
     // correctPassword is a instance method which is avalible on all the document of user
     // const correct=await user.correctPassword(password, user.password)  -> is not correct bcz if the user if not present then this will not run
     console.log(user);
