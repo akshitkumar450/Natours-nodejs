@@ -4,6 +4,8 @@ const catchAsyncError = require('../utils/catchAsyncError');
 const jwt = require('jsonwebtoken')
 const ApiError = require('./../utils/apiErrors')
 const sendEmail = require('./../utils/email')
+const crypto = require('crypto')
+
 
 
 function signToken(id) {
@@ -148,13 +150,38 @@ const forgotPass = catchAsyncError(async (req, res, next) => {
 
         return next(new ApiError('there was an error sending the email. try again later!'), 500)
     }
-
-
 })
 
 
+const resetPass = catchAsyncError(async (req, res, next) => {
+    // 1) get user based on the  token
 
-const resetPass = (req, res, next) => { }
+    // to compare the token ,,we have converted the plain token to encrypted
+    const hashedToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
+
+    //get the user on the token and also checking if the token is not expired
+    const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetExpires: { $gt: Date.now() } })
+
+    // 2) if token is not expired and there is a user,,set new pasword
+    if (!user) {
+        return next(new ApiError('your token is invalid or expired.'), 401)
+    }
+    // set the new password 
+    user.password = req.body.password
+    user.confirmPassword = req.body.confirmPassword
+    user.passwordResetToken = undefined
+    user.passwordResetExpires = undefined
+    await user.save()
+
+    // 3) update the changedpassword prop for the user
+
+    // 4) log the user in, send JWT
+    const token = signToken(user._id)
+    res.status(200).json({
+        status: 'success',
+        token: token
+    })
+})
 
 module.exports = {
     signup,
