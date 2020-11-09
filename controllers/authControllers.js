@@ -113,16 +113,16 @@ const restrictTo = (...roles) => {
 }
 
 const forgotPass = catchAsyncError(async (req, res, next) => {
-    // 1) get user based on posted amail
+    // 1) get user based on posted email
     const user = await User.findOne({ email: req.body.email })
     if (!user) {
         return next(new ApiError('the user with the email is not found'), 404)
     }
+    // 2)generate the random reset token
 
     const resetToken = user.createPasswordResetToken()
     await user.save({ validateBeforeSave: false })
-    // 2)generate the random reset token
-    // 3) sedn to to user's email
+    // 3) send to to user's email
 })
 const resetPass = (req, res, next) => { }
 
