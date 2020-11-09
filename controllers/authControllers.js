@@ -21,7 +21,8 @@ const signup = catchAsyncError(async (req, res, next) => {
         email: req.body.email,
         password: req.body.password,
         confirmPassword: req.body.confirmPassword,
-        role: req.body.role
+        role: req.body.role,
+        passwordChangedAt: req.body.passwordChangedAt
     })
 
     const token = signToken(newUser._id)

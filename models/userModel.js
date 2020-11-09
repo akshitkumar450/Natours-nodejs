@@ -2,6 +2,7 @@ const crypto = require('crypto')
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const { use } = require('../routes/toursroutes')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -47,6 +48,8 @@ const userSchema = new mongoose.Schema({
     passwordResetExpires: Date
 })
 
+// ***************MIDDLEWARES******************//
+
 // / to store encrypted password in our database
 // we have used this bcz ,, it will run before saving into the DB .. so this is the right place to encrypt the password before saving in to database
 userSchema.pre('save', async function (next) {
@@ -60,6 +63,14 @@ userSchema.pre('save', async function (next) {
     this.confirmPassword = undefined
     next()
 })
+
+userSchema.pre('save', function (next) {
+    if (!this.isModified('password') || this.isNew) return next()
+    this.passwordChangedAt = Date.now() - 1000 // bcz this will ensure that token is made only after the password is changed
+    next()
+})
+
+// ************INSTACNES*************//
 
 // this is an instance method on the user model and it is avalible for all the docs created by user collection
 // passwordEnterByUser is the password enter by user and it is not hashed
