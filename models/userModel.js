@@ -1,3 +1,4 @@
+const crypto = require('crypto')
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
@@ -41,7 +42,9 @@ const userSchema = new mongoose.Schema({
             message: 'passwords are not same'
         }
     },
-    passwordChangedAt: Date
+    passwordChangedAt: Date,
+    passwordResetToken: String,
+    passwordResetExpires: Date
 })
 
 // / to store encrypted password in our database
@@ -76,5 +79,20 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
     return false // means that user has not chnaged the password
 }
+
+// instance method for creating a token for reset
+// we have used crypto for creating the random token for reset
+userSchema.methods.createPasswordResetToken = function () {
+    // this is the token in plain text with random string
+    const resetToken = crypto.randomBytes(32).toString('hex')
+    // this is encrypted token which will be stored in our DB
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+    console.log({ resetToken }, this.passwordResetToken);
+    // time for token to expire
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000
+
+    return resetToken;
+}
+
 const User = mongoose.model('User', userSchema)
 module.exports = User

@@ -8,10 +8,12 @@ const {
   deleteUser,
 } = require('../controllers/userController');
 
-const { signup, login } = require('./../controllers/authControllers')
+const { signup, login, forgotPass, resetPass } = require('./../controllers/authControllers')
 
 router.post('/signup', signup)
 router.post('/login', login)
+router.post('/forgetPass', forgotPass)
+router.post('/resetPass', resetPass)
 
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
