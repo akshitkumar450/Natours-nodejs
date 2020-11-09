@@ -3,6 +3,7 @@ const User = require('./../models/userModel')
 const catchAsyncError = require('../utils/catchAsyncError');
 const jwt = require('jsonwebtoken')
 const ApiError = require('./../utils/apiErrors')
+const sendEmail = require('./../utils/email')
 
 
 function signToken(id) {
@@ -121,9 +122,38 @@ const forgotPass = catchAsyncError(async (req, res, next) => {
     // 2)generate the random reset token
 
     const resetToken = user.createPasswordResetToken()
-    await user.save({ validateBeforeSave: false })
+    // weh have save bcz ,, we only have modified the passwordResetTOken and passwordResetExpires but not save in DB
+    await user.save({ validateBeforeSave: false }) // this will neglect the required fields  and validators on DB 
     // 3) send to to user's email
+    // we have send the link for reseting the password to user's email(mailtrap)
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPass/${resetToken}`
+
+    const message = `forgot your password ? submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\n if you didn't forget your password ,please ignore this email `
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'your password reset token (Valid for 10 min)',
+            message: message
+        })
+        res.status(200).json({
+            status: "success",
+            message: 'token send to email'
+        })
+    }
+    catch (err) {
+        user.PasswordResetToken = undefined
+        user.PasswordResetExpires = undefined
+        await user.save({ validateBeforeSave: false })
+
+        return next(new ApiError('there was an error sending the email. try again later!'), 500)
+    }
+
+
 })
+
+
+
 const resetPass = (req, res, next) => { }
 
 module.exports = {

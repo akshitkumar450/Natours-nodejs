@@ -13,7 +13,7 @@ const { signup, login, forgotPass, resetPass } = require('./../controllers/authC
 router.post('/signup', signup)
 router.post('/login', login)
 router.post('/forgetPass', forgotPass)
-router.post('/resetPass', resetPass)
+router.patch('/resetPass/:token', resetPass)
 
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);
