@@ -50,10 +50,10 @@ const login = catchAsyncError(async (req, res, next) => {
     // if user does not exist then next line will not run
     // const correct=await user.correctPassword(password, user.password)  -> is not correct bcz if the user if not present then this will not run
 
-    // 3) if everything is ok ,,send the token to client
     if (!user || !await user.correctPassword(password, user.password)) {
         return next(new ApiError('incorrect email or password'), 401)
     }
+    // 3) if everything is ok ,,send the token to client
     const token = signToken(user._id)
     res.status(200).json({
         status: 'success',
@@ -77,6 +77,7 @@ const protect = catchAsyncError(async (req, res, next) => {
 
     // 2) verification the token
 
+    // decoded is the user which has the token and added in DB
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
     // console.log(decoded);
     // 3) if user still exists

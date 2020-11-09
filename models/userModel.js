@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
 // / to store encrypted password in our database
 // we have used this bcz ,, it will run before saving into the DB .. so this is the right place to encrypt the password before saving in to database
 userSchema.pre('save', async function (next) {
-    // only work if the password in not updated
+    // only work if the password field is  updated or created new
     if (!this.isModified('password')) return next()
 
     // encrypting or hashing the password  and it will retunr a promise 
