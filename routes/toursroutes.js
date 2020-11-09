@@ -5,7 +5,7 @@ const {
 } = require('../controllers/tourController');
 
 // to allow only users which are login to see all tours
-const { protect } = require('./../controllers/authControllers')
+const { protect, restrictTo } = require('./../controllers/authControllers')
 
 
 router.get('/top-5-cheap', aliasTopTous, getAllTour);
@@ -19,7 +19,8 @@ router.get('/:id', getTourById);
 // while creating new user check it has name  or not if not send 400 error request
 //checkbody is a middleware ,which check whether a new user has a name or not
 router.post('/', createNewTour);
-router.delete('/:id', deleteTour);
+// deleting of the tour cant be done by any ,,only specific person are allowed to delete the tour
+router.delete('/:id', protect, restrictTo('admin', 'lead-guide'), deleteTour);
 router.patch('/:id', updateTour);
 
 module.exports = router;

@@ -18,6 +18,7 @@ const signup = catchAsyncError(async (req, res, next) => {
         email: req.body.email,
         password: req.body.password,
         confirmPassword: req.body.confirmPassword,
+        role: req.body.role
     })
 
     const token = signToken(newUser._id)
@@ -99,9 +100,22 @@ const protect = catchAsyncError(async (req, res, next) => {
 
 })
 
+// roles will be an array of given arguments
+// we have created a fn like this bcz we have to pass argumnets in fn and middleware can't accept any agruments. so we have wrapped the middleware in a function accepting the arguments
+const restrictTo = (...roles) => {
+    return (req, res, next) => {
+        // roles ['admin','lead-guide']
+        if (!roles.includes(req.user.role)) {
+            return next(new ApiError('you do not have access to peform this action'), 403)
+        }
+        next()
+    }
+}
+
 
 module.exports = {
     signup,
     login,
-    protect
+    protect,
+    restrictTo
 }
