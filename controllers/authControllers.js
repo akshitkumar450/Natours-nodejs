@@ -14,18 +14,6 @@ function signToken(id) {
     })
 }
 
-const createSendToken = (user, statusCode, res) => {
-    const token = signToken(user._id)
-    res.status(statusCode).json({
-        status: 'success',
-        token: token,
-        data: {
-            user: user
-        }
-    })
-}
-
-
 // signin the new user to generate the token
 const signup = catchAsyncError(async (req, res, next) => {
     const newUser = await User.create({
@@ -38,9 +26,16 @@ const signup = catchAsyncError(async (req, res, next) => {
         active: req.body.active // helpful while deleting the document
     })
 
-    createSendToken(newUser, 201, res)
-})
+    const token = signToken(newUser._id)
 
+    res.status(201).json({
+        status: 'success',
+        token: token,
+        data: {
+            user: newUser
+        }
+    })
+})
 
 // for login user
 const login = catchAsyncError(async (req, res, next) => {
@@ -65,8 +60,11 @@ const login = catchAsyncError(async (req, res, next) => {
         return next(new ApiError('incorrect email or password'), 401)
     }
     // 3) if everything is ok ,,send the token to client
-    createSendToken(user, 200, res)
-
+    const token = signToken(user._id)
+    res.status(200).json({
+        status: 'success',
+        token: token
+    })
 })
 
 const protect = catchAsyncError(async (req, res, next) => {
@@ -180,8 +178,11 @@ const resetPass = catchAsyncError(async (req, res, next) => {
     // 3) update the changedpassword prop for the user
 
     // 4) log the user in, send JWT
-    createSendToken(user, 200, res)
-
+    const token = signToken(user._id)
+    res.status(200).json({
+        status: 'success',
+        token: token
+    })
 })
 
 // only for login users and user to enter current pass so inorder to confirm his indentity for security measures
@@ -200,8 +201,11 @@ const updatePassword = catchAsyncError(async (req, res, next) => {
     user.confirmPassword = req.body.confirmPassword
     await user.save()
     // 4) login the user , send JWT 
-    createSendToken(user, 200, res)
-
+    const token = signToken(user._id)
+    res.status(200).json({
+        status: 'success',
+        token: token
+    })
 })
 
 module.exports = {
