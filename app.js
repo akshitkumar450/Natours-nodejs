@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const rateLimit = require('express-rate-limit')
 const ApiErrors = require('./utils/apiErrors');
 const globalErrorHandler = require('./controllers/errorControllers');
 // used to log the request in terminal
@@ -12,6 +13,16 @@ const userRouter = require('./routes/userroutes');
 // if (process.env.NODE_ENV === 'development') {
 //   app.use(morgan('dev'))
 // }
+
+// Rate-limiter MiDDLEWARE
+const Limiter = rateLimit({
+  // 100 requests from same IP  in 1 hour if exceed then error will come
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: 'too many requests from this IP ,please try again later'
+})
+
+app.use('/api', Limiter)
 
 app.use(express.json());
 app.use('/', express.static(__dirname + '/public'));
