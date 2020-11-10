@@ -59,6 +59,13 @@ const updateMe = catchAsyncError(async (req, res, next) => {
   })
 })
 
+const deleteMe = catchAsyncError(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(req.user.id, { active: false })
+  res.status(204).json({
+    status: 'success',
+    data: null
+  })
+})
 
 const getUserById = (req, res) => {
   res.status(500).json({
@@ -91,5 +98,6 @@ module.exports = {
   createNewUser,
   deleteUser,
   updateUser,
-  updateMe
+  updateMe,
+  deleteMe
 };

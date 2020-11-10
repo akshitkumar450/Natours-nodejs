@@ -45,7 +45,12 @@ const userSchema = new mongoose.Schema({
     },
     passwordChangedAt: Date,
     passwordResetToken: String,
-    passwordResetExpires: Date
+    passwordResetExpires: Date,
+    active: {
+        type: Boolean,
+        default: true,
+        select: false
+    }
 })
 
 // ***************MIDDLEWARES******************//
@@ -68,6 +73,13 @@ userSchema.pre('save', function (next) {
     if (!this.isModified('password') || this.isNew) return next()
     this.passwordChangedAt = Date.now() - 1000 // bcz this will ensure that token is made only after the password is changed
     next()
+})
+
+// for deleteMe route
+userSchema.pre(/^find/, function (next) {
+    this.find({ active: { $ne: false } })
+    next()
+
 })
 
 // ************INSTACNES*************//
