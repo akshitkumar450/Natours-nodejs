@@ -8,12 +8,14 @@ const {
   deleteUser,
 } = require('../controllers/userController');
 
-const { signup, login, forgotPass, resetPass } = require('./../controllers/authControllers')
+const { signup, login, forgotPass, resetPass, updatePassword, protect } = require('./../controllers/authControllers')
 
 router.post('/signup', signup)
 router.post('/login', login)
 router.post('/forgetPass', forgotPass)
 router.patch('/resetPass/:token', resetPass)
+
+router.patch('/updatePass', protect, updatePassword)
 
 router.get('/', getAllUsers);
 router.get('/:id', getUserById);

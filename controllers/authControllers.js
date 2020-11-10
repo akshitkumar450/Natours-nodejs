@@ -184,6 +184,29 @@ const resetPass = catchAsyncError(async (req, res, next) => {
     })
 })
 
+// only for login users and user to enter current pass so inorder to confirm his indentity for security measures
+const updatePassword = catchAsyncError(async (req, res, next) => {
+
+    // 1) get the user from DB  
+    // this is for only authenicated user (logged in user) so will have current user in DB (comign from portected)
+    const user = await User.findById(req.user.id).select('+password')
+
+    // 2) check if posted pass is correct
+    if (! await (user.correctPassword(req.body.passwordCurrent, user.password))) {
+        return next(new ApiError('your current password is wrong'), 401)
+    }
+    // 3) if pass is correct then update the pass
+    user.password = req.body.password
+    user.confirmPassword = req.body.confirmPassword
+    await user.save()
+    // 4) login the user , send JWT 
+    const token = signToken(user._id)
+    res.status(200).json({
+        status: 'success',
+        token: token
+    })
+})
+
 module.exports = {
     signup,
     login,
@@ -191,5 +214,6 @@ module.exports = {
     restrictTo,
     forgotPass,
     resetPass,
+    updatePassword
 
 }
