@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const rateLimit = require('express-rate-limit')
 const helmet = require('helmet')
+const mongoSanitize = require('express-mongo-sanitize')
+const xss = require('xss-clean')
 const ApiErrors = require('./utils/apiErrors');
 const globalErrorHandler = require('./controllers/errorControllers');
 // used to log the request in terminal
@@ -31,7 +33,20 @@ app.use('/api', Limiter)
 
 
 app.use(express.json({ limit: '10kb' }));
+/*  {
+  "email":{"$gt":""},
+  "password":"newpass1234"
+}*/
+//  with above request we can login with the password without knowing email id ...bcz {"$gt":""} is always true
+
+//  DATA Sanitization against NOSQL query injection 
+app.use(mongoSanitize()) // this will fail the above code to login 
+
+//  DATA Sanitization against XSS 
+app.use(xss())
+
 app.use('/', express.static(__dirname + '/public'));
+
 
 //** ROUTERS */
 app.use('/api/v1/tours', tourRouter);
