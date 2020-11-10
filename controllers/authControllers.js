@@ -14,7 +14,7 @@ function signToken(id) {
     })
 }
 
-function createSendToken(user, statusCode, res) {
+const createSendToken = (user, statusCode, res) => {
     const token = signToken(user._id)
     res.status(statusCode).json({
         status: 'success',
@@ -24,6 +24,7 @@ function createSendToken(user, statusCode, res) {
         }
     })
 }
+
 
 // signin the new user to generate the token
 const signup = catchAsyncError(async (req, res, next) => {
@@ -36,9 +37,10 @@ const signup = catchAsyncError(async (req, res, next) => {
         passwordChangedAt: req.body.passwordChangedAt,
         active: req.body.active // helpful while deleting the document
     })
-    createSendToken(newUser, 201, res)
 
+    createSendToken(newUser, 201, res)
 })
+
 
 // for login user
 const login = catchAsyncError(async (req, res, next) => {
@@ -199,6 +201,7 @@ const updatePassword = catchAsyncError(async (req, res, next) => {
     await user.save()
     // 4) login the user , send JWT 
     createSendToken(user, 200, res)
+
 })
 
 module.exports = {
