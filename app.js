@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const rateLimit = require('express-rate-limit')
+const helmet = require('helmet')
 const ApiErrors = require('./utils/apiErrors');
 const globalErrorHandler = require('./controllers/errorControllers');
 // used to log the request in terminal
@@ -14,6 +15,10 @@ const userRouter = require('./routes/userroutes');
 //   app.use(morgan('dev'))
 // }
 
+// security HTTP Headers HELMET MIDDLWARE ,,always on top of routes
+app.use(helmet())
+
+
 // Rate-limiter MiDDLEWARE
 const Limiter = rateLimit({
   // 100 requests from same IP  in 1 hour if exceed then error will come
@@ -24,7 +29,8 @@ const Limiter = rateLimit({
 
 app.use('/api', Limiter)
 
-app.use(express.json());
+
+app.use(express.json({ limit: '10kb' }));
 app.use('/', express.static(__dirname + '/public'));
 
 //** ROUTERS */
