@@ -8,6 +8,7 @@ const ApiErrors = require('./utils/apiErrors');
 const globalErrorHandler = require('./controllers/errorControllers');
 // used to log the request in terminal
 const morgan = require('morgan');
+const hpp = require('hpp')
 
 const tourRouter = require('./routes/toursroutes');
 const userRouter = require('./routes/userroutes');
@@ -43,7 +44,18 @@ app.use(express.json({ limit: '10kb' }));
 app.use(mongoSanitize()) // this will fail the above code to login 
 
 //  DATA Sanitization against XSS 
-app.use(xss())
+app.use(xss()) // it will prevent the from html code in request and convert them in  to spl. query 
+// <div id='bad code'>mike </div>  ====>> ("&lt;div id='bad code'>mike &lt;/div>")
+
+// PREVENT POLLUTION PARAMETER
+// it will not allow duplicates in query string
+//  ?sort=duration&sort=price will not work 
+//  but after using hpp ?sort=dsuration&sort=price will only sort by price 
+app.use(hpp({
+  //  whitelist will allow the specific property to have duplicates in query string
+  whitelist: ['duration', 'ratingsAverage', 'price', 'difficulty']
+}))
+
 
 app.use('/', express.static(__dirname + '/public'));
 
