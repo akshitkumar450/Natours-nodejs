@@ -37,6 +37,22 @@ const reviewSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 })
 
+//  query middleware for populating the selected fiedls in O/P
+// without this middleware in getAllreviews Fn there will be only id's of tour and user
+//  but after putting this query middleware selected data of user and tour will be shown
+// for populating the two fields we need to populate twice
+reviewSchema.pre(/^find/, function (next) {
+    this.populate({
+        path: 'tour',
+        select: 'name'
+    }).populate({
+        path: 'user',
+        select: 'name photo'
+    })
+    next()
+})
+
+
 const Review = mongoose.model('Review', reviewSchema)
 
 module.exports = Review
