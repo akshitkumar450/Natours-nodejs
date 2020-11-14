@@ -20,6 +20,8 @@ const reviewSchema = new mongoose.Schema({
     // review must be for any tour and must be  by any user 
     //  parent referncing
 
+
+    // reviews pointing to tour
     tour: {
         type: mongoose.Schema.ObjectId,
         ref: 'Tour',
@@ -43,12 +45,16 @@ const reviewSchema = new mongoose.Schema({
 // for populating the two fields we need to populate twice
 reviewSchema.pre(/^find/, function (next) {
     this.populate({
-        path: 'tour',
-        select: 'name'
-    }).populate({
         path: 'user',
         select: 'name photo'
     })
+    // this.populate({
+    //     path: 'tour',
+    //     select: 'name'
+    // }).populate({
+    //     path: 'user',
+    //     select: 'name photo'
+    // })
     next()
 })
 

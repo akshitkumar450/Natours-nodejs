@@ -36,7 +36,7 @@ const getTourById = catchAsyncError(async (req, res, next) => {
 
   //  we have put the above code in query middleware bcz it will run for all find queries
 
-  const tour = await Tour.findById(req.params.id)
+  const tour = await (await Tour.findById(req.params.id)).populate('reviews')
 
   // const tour = await Tour.findOne({ _id: req.params.id })
 

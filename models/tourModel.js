@@ -95,7 +95,7 @@ const tourSchema = new mongoose.Schema(
             description: String
         },
         // to create a document and embedd them
-        location: [
+        locations: [
             {
                 type: {
                     type: String,
@@ -119,7 +119,16 @@ const tourSchema = new mongoose.Schema(
                 type: mongoose.Schema.ObjectId,
                 ref: 'User' // this will create relationship b/w 2 data sets
             }
-        ]
+        ],
+
+        // child referencing method
+
+        // reviews: [{
+        //     type: mongoose.Schema.ObjectId,
+        //     ref: 'Review'
+        // }]
+
+        // instead use virtual populate
     },
     {
         toJSON: { virtuals: true },
@@ -129,6 +138,18 @@ const tourSchema = new mongoose.Schema(
 
 tourSchema.virtual('durationWeeks').get(function () {
     return this.duration / 7;
+})
+
+// ***********virtual populate****************
+// by this we can get all the reviews of  tour
+// we can  access to all reviews for certain tour
+
+tourSchema.virtual('reviews', {
+    ref: 'Review',    // name of model
+    // fields for connecting two data sets 
+    foreignField: 'tour', // name of field in other model in Review Model where refernce of current model is stored
+    localField: '_id' // where id stored in current tour model (DB)
+    //  id in the current model is called the tour in Review Model
 })
 
 // document middle it run before .save() and .create()
