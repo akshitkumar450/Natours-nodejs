@@ -117,7 +117,7 @@ const tourSchema = new mongoose.Schema(
             {
                 // type each of element in guides array  will be mongoDB ID
                 type: mongoose.Schema.ObjectId,
-                ref: 'User'
+                ref: 'User' // this will create relationship b/w 2 data sets
             }
         ]
     },
@@ -135,6 +135,16 @@ tourSchema.virtual('durationWeeks').get(function () {
 tourSchema.pre('save', function (next) {
     // this is the currenlt processed document
     this.slug = slugify(this.name, { lower: true })
+    next()
+})
+
+// for referncing the User in Tour
+tourSchema.pre(/^find/, function (next) {
+    // this will work for all find queries
+    this.populate({
+        path: 'guides',                   // included fields
+        select: '-__v -passwordChangedAt'  // excluded fields
+    })
     next()
 })
 
