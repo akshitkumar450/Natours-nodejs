@@ -146,6 +146,7 @@ tourSchema.pre(/^find/, function (next) {
         select: '-__v -passwordChangedAt'  // excluded fields
     })
     next()
+    //  by using this the getAll tour fn will also show the  guides data  instaed of user id
 })
 
 // for storing the id's of all users in guides fields
