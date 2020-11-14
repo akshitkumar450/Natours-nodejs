@@ -17,6 +17,7 @@ const getAllReviews = catchAsyncError(async (req, res, next) => {
 const createNewReview = catchAsyncError(async (req, res, next) => {
 
     // allow nested routes
+    //  here  tour id will come from URL and user id will come from currently logged in user 
 
     if (!req.body.tour) req.body.tour = req.params.tourId
     if (!req.body.user) req.body.user = req.user.id

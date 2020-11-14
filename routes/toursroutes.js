@@ -32,6 +32,7 @@ router.patch('/:id', updateTour);
 // GET /tour/25646564sd/reviews
 // GET /tour/25646564sd/reviews/sd9ds97f
 
+//  here  tour id will come from URL and user id will come from currently logged in user 
 router.post('/:tourId/reviews', protect, restrictTo('user'), createNewReview)
 
 module.exports = router;
