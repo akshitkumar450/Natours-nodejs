@@ -28,7 +28,11 @@ const getAllTour = catchAsyncError(async (req, res, next) => {
 });
 
 const getTourById = catchAsyncError(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
+  // populate method will include the guide fields in tour but only in O/P not in DB
+  const tour = await Tour.findById(req.params.id).populate({
+    path: 'guides',                   // included fields
+    select: '-__v -passwordChangedAt'  // excluded fields
+  })
   // const tour = await Tour.findOne({ _id: req.params.id })
 
   if (!tour) {
