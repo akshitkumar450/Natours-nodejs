@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const slugify = require('slugify')
-const User = require('./userModel')
+// const User = require('./userModel')
 // defining a schema for our tours
 const tourSchema = new mongoose.Schema(
     {
@@ -108,9 +108,18 @@ const tourSchema = new mongoose.Schema(
                 day: Number
             }
         ],
-        // guides will bea array of the user id 
-        guides: Array
+        // for embedding
+        // guides will bea array of the user id which will contain user details
+        // guides: Array
 
+        // for referncing
+        guides: [
+            {
+                // type each of element in guides array  will be mongoDB ID
+                type: mongoose.Schema.ObjectId,
+                ref: 'User'
+            }
+        ]
     },
     {
         toJSON: { virtuals: true },
@@ -132,12 +141,13 @@ tourSchema.pre('save', function (next) {
 // for storing the id's of all users in guides fields
 // embedding  for tour guides 
 // only work for creating new documents
-tourSchema.pre('save', async function (next) {
-    //  guidesPromises -> this will be an  array of promises of all the user id's
-    const guidesPromises = this.guides.map(async id => await User.findById(id))
-    this.guides = await Promise.all(guidesPromises)
-    next()
-})
+//  embedding Users in Tours
+// tourSchema.pre('save', async function (next) {
+//     //  guidesPromises -> this will be an  array of promises of all the user id's
+//     const guidesPromises = this.guides.map(async id => await User.findById(id))
+//     this.guides = await Promise.all(guidesPromises)
+//     next()
+// })
 
 
 // tourSchema.pre('save', function (next) {
