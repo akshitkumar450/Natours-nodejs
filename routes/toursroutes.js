@@ -7,6 +7,9 @@ const {
 // to allow only users which are login to see all tours
 const { protect, restrictTo } = require('./../controllers/authControllers')
 
+const { getAllReviews, createNewReview } = require('./../controllers/reviewControllers')
+
+
 
 router.get('/top-5-cheap', aliasTopTous, getAllTour);
 router.get('/tour-stats', getTourStats);
@@ -22,5 +25,13 @@ router.post('/', createNewTour);
 // deleting of the tour cant be done by any ,,only specific person are allowed to delete the tour
 router.delete('/:id', protect, restrictTo('admin', 'lead-guide'), deleteTour);
 router.patch('/:id', updateTour);
+
+// nested routes
+
+// POST /tour/25646564sd/reviews
+// GET /tour/25646564sd/reviews
+// GET /tour/25646564sd/reviews/sd9ds97f
+
+router.post('/:tourId/reviews', protect, restrictTo('user'), createNewReview)
 
 module.exports = router;
