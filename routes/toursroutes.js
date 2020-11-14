@@ -7,9 +7,23 @@ const {
 // to allow only users which are login to see all tours
 const { protect, restrictTo } = require('./../controllers/authControllers')
 
-const { getAllReviews, createNewReview } = require('./../controllers/reviewControllers')
+const reviewRouter = require('./../routes/reviewroutes')
+// const { getAllReviews, createNewReview } = require('./../controllers/reviewControllers')
 
+// nested routes ***************
 
+// POST /tour/25646564sd/reviews
+// GET /tour/25646564sd/reviews
+// GET /tour/25646564sd/reviews/sd9ds97f
+
+//  here  tour id will come from URL and user id will come from currently logged in user 
+// router.post('/:tourId/reviews', protect, restrictTo('user'), createNewReview)
+
+// we have done the refactoring bcz we are doing the work of reviews in tour routes
+// and we have put the route here bcz it starts with tour route
+// its just a kind of middleware ....
+//   we have re routed to reviewRouter just as we have done before in app.js file just mounting the router
+router.use('/:tourId/reviews', reviewRouter)
 
 router.get('/top-5-cheap', aliasTopTous, getAllTour);
 router.get('/tour-stats', getTourStats);
@@ -26,13 +40,5 @@ router.post('/', createNewTour);
 router.delete('/:id', protect, restrictTo('admin', 'lead-guide'), deleteTour);
 router.patch('/:id', updateTour);
 
-// nested routes
-
-// POST /tour/25646564sd/reviews
-// GET /tour/25646564sd/reviews
-// GET /tour/25646564sd/reviews/sd9ds97f
-
-//  here  tour id will come from URL and user id will come from currently logged in user 
-router.post('/:tourId/reviews', protect, restrictTo('user'), createNewReview)
 
 module.exports = router;
