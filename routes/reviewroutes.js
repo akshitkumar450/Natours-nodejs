@@ -5,8 +5,8 @@ const { getAllReviews, createNewReview } = require('./../controllers/reviewContr
 const { protect, restrictTo } = require('./../controllers/authControllers')
 
 
-router.get('/', protect, restrictTo('user'), getAllReviews)
-router.post('/', createNewReview)
+router.get('/', getAllReviews)
+router.post('/', protect, restrictTo('user'), createNewReview)
 
 
 module.exports = router
