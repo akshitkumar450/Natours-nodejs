@@ -136,10 +136,11 @@ const tourSchema = new mongoose.Schema(
     }
 )
 
-//  indexing 
+//  **************indexing  **********************
 // indexing is used for querying . it separate the field to be queried
+//  indexing is used to increase reading performance 
 // tourSchema.index({ price: 1 })
-tourSchema.index({ price: 1, ratingsAverage: -1 })
+tourSchema.index({ price: 1, ratingsAverage: -1 })  // compound index
 tourSchema.index({ slug: 1 })
 
 tourSchema.virtual('durationWeeks').get(function () {

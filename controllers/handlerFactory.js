@@ -79,7 +79,7 @@ exports.getAll = (Model) => catchAsyncError(async (req, res, next) => {
         .limitFields()
         .pagenation()
         .sort();
-    // const docs = await features.query.explain();  // to get statstics of tours
+    // const docs = await features.query.explain();  // to get statstics of tours  // for indexing
     const docs = await features.query;
     res.status(200).json({
         status: 'success',
