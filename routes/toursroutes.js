@@ -27,18 +27,19 @@ router.use('/:tourId/reviews', reviewRouter)
 
 router.get('/top-5-cheap', aliasTopTous, getAllTour);
 router.get('/tour-stats', getTourStats);
-router.get('/monthly-plan/:year', getMonthlyPlan);
+router.get('/monthly-plan/:year', protect, restrictTo('admin', 'lead-guide', 'guide'), getMonthlyPlan);
 
-
-router.get('/', protect, getAllTour);
+//  we have delete protect middleware bcz we want anyone to see all tours
+router.get('/', getAllTour);
+// router.get('/', protect, getAllTour);
 router.get('/:id', getTourById);
 
 // while creating new user check it has name  or not if not send 400 error request
 //checkbody is a middleware ,which check whether a new user has a name or not
-router.post('/', createNewTour);
+router.post('/', protect, restrictTo('admin', 'lead-guide'), createNewTour);
 // deleting of the tour cant be done by any ,,only specific person are allowed to delete the tour
 router.delete('/:id', protect, restrictTo('admin', 'lead-guide'), deleteTour);
-router.patch('/:id', updateTour);
+router.patch('/:id', protect, restrictTo('admin', 'lead-guide'), updateTour);
 
-
+//  updating,creating and deleting tour can only done by loged in user and admin and lead-guide
 module.exports = router;
