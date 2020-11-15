@@ -12,21 +12,23 @@ const aliasTopTous = (req, res, next) => {
   next();
 };
 
-const getAllTour = catchAsyncError(async (req, res, next) => {
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .limitFields()
-    .pagenation()
-    .sort();
-  const tours = await features.query;
-  res.status(200).json({
-    status: 'success',
-    result: tours.length,
-    data: {
-      tours: tours,
-    },
-  });
-});
+// const getAllTour = catchAsyncError(async (req, res, next) => {
+//   const features = new APIFeatures(Tour.find(), req.query)
+//     .filter()
+//     .limitFields()
+//     .pagenation()
+//     .sort();
+//   const tours = await features.query;
+//   res.status(200).json({
+//     status: 'success',
+//     result: tours.length,
+//     data: {
+//       tours: tours,
+//     },
+//   });
+// });
+
+const getAllTour = factory.getAll(Tour)
 
 // const getTourById = catchAsyncError(async (req, res, next) => {
 //   // populate method will include the guide fields in tour but only in O/P not in DB

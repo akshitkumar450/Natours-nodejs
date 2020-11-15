@@ -6,16 +6,7 @@ const factory = require('./handlerFactory')
 
 
 
-const getAllUsers = catchAsyncError(async (req, res, next) => {
-  const users = await User.find()
-  res.status(200).json({
-    status: 'success',
-    result: users.length,
-    data: {
-      users: users,
-    },
-  });
-});
+const getAllUsers = factory.getAll(User)
 
 // filtering out unwanted fields from req.body that we dont want to update
 const filterObj = (obj, ...allowedFields) => {

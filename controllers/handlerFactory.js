@@ -1,6 +1,7 @@
 const catchAsyncError = require('./../utils/catchAsyncError')
 const ApiErrors = require('./../utils/apiErrors');
-const { Model } = require('mongoose');
+const APIFeatures = require('./../utils/apiFeatures')
+
 
 
 //  this function will handle all the delete operations for all the different models(Model===>tours,users,reviews)
@@ -61,3 +62,29 @@ exports.getOne = (Model, popOptions) => catchAsyncError(async (req, res, next) =
         },
     });
 })
+
+exports.getAll = (Model) => catchAsyncError(async (req, res, next) => {
+
+    //  used in getAllReview fn
+    // *** To allow for nested GET reviews on tour (A SMALL HACK)
+    let filterObj = {}
+    if (req.params.tourId) filterObj = { tour: req.params.tourId }
+
+    //  these api featues will also work on getAllReview  and getAllUsers
+    //  basically it will work on all the fn where it has been used
+
+    const features = new APIFeatures(Model.find(filterObj), req.query)
+        .filter()
+        .limitFields()
+        .pagenation()
+        .sort();
+    const docs = await features.query;
+    res.status(200).json({
+        status: 'success',
+        result: docs.length,
+        data: {
+            data: docs,
+        },
+    });
+})
+

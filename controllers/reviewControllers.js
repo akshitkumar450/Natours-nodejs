@@ -5,20 +5,21 @@ const factory = require('./handlerFactory')
 
 
 
-const getAllReviews = catchAsyncError(async (req, res, next) => {
+// const getAllReviews = catchAsyncError(async (req, res, next) => {
 
-    let filterObj = {}
-    if (req.params.tourId) filterObj = { tour: req.params.tourId }
+//     let filterObj = {}
+//     if (req.params.tourId) filterObj = { tour: req.params.tourId }
 
-    const reviews = await Review.find(filterObj)
-    res.status(200).json({
-        status: 'success',
-        results: reviews.length,
-        data: {
-            reviews: reviews
-        }
-    })
-})
+//     const reviews = await Review.find(filterObj)
+//     res.status(200).json({
+//         status: 'success',
+//         results: reviews.length,
+//         data: {
+//             reviews: reviews
+//         }
+//     })
+// })
+const getAllReviews = factory.getAll(Review)
 
 const setTourUserIds = (req, res, next) => {
 
