@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const Tour = require('./tourModel')
 
 
 
@@ -57,6 +58,44 @@ reviewSchema.pre(/^find/, function (next) {
     // })
     next()
 })
+
+//  static methods
+//  static methods are avaliable on Model
+//  in static methods this point to Model
+reviewSchema.statics.calcAverageRatings = async function (tourId) {
+    // this point to current Model
+    const stats = await this.aggregate([
+
+        {
+            $match: { tour: tourId }
+        },
+        {
+            $group: {
+                _id: '$tour',
+                nRatings: { $sum: 1 },
+                avgRating: { $avg: '$rating' }
+            }
+        }
+    ])
+    // console.log(stats);  // stats is an array 
+    await Tour.findByIdAndUpdate(tourId, {
+        ratingsQuantity: stats[0].nRatings,
+        ratingsAverage: stats[0].avgRating
+    })
+
+}
+// to use the static method
+reviewSchema.post('save', function () {
+    // this point to current Review
+
+    this.constructor.calcAverageRatings(this.tour) // this point to current Model who create the document
+
+    // Review.calcAverageRatings(this.tour) // Review is not available here
+
+})
+
+
+
 
 
 const Review = mongoose.model('Review', reviewSchema)
