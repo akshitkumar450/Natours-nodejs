@@ -196,7 +196,7 @@ const getToursWithin = catchAsyncError(async (req, res, next) => {
   const radius /*(radians )*/ = unit === 'mi' ? distance / 3963.2 /*(radius of earth in miles)*/ : distance / 6378.1  /*(radius of earth in km)*/
 
   if (!lat || !lng) {
-    return next(new ApiErrors('please provide latitide and longitude in format '), 400)
+    return next(new ApiErrors('please provide latitide and longitude in format ', 400))
   }
   // console.log(distance, unit, lat, lng);
 
