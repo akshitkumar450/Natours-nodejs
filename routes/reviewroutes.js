@@ -5,12 +5,13 @@ const router = express.Router({ mergeParams: true })  // enabling mergeParams->t
 // we have use mergeParams here bcz we want to have access of tourId from tourroutes router
 
 
-const { getAllReviews, createNewReview } = require('./../controllers/reviewControllers')
+const { getAllReviews, createNewReview, deleteReview } = require('./../controllers/reviewControllers')
 const { protect, restrictTo } = require('./../controllers/authControllers')
 
 
 router.get('/', getAllReviews)
 router.post('/', protect, restrictTo('user'), createNewReview)
+router.delete('/:id', deleteReview)
 
 
 module.exports = router

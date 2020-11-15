@@ -2,6 +2,8 @@ const User = require('./../models/userModel');
 const catchAsyncError = require('./../utils/catchAsyncError');
 const ApiError = require('./../utils/apiErrors');
 const { use } = require('../routes/userroutes');
+const factory = require('./handlerFactory')
+
 
 
 const getAllUsers = catchAsyncError(async (req, res, next) => {
@@ -85,12 +87,7 @@ const updateUser = (req, res) => {
     message: 'this method is not done yet',
   });
 };
-const deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this method is not done yet',
-  });
-};
+const deleteUser = factory.deleteOne(User)
 
 module.exports = {
   getAllUsers,
