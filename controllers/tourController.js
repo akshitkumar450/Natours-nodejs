@@ -52,18 +52,20 @@ const getTourById = catchAsyncError(async (req, res, next) => {
   });
 });
 
-const createNewTour = catchAsyncError(async (req, res, next) => {
-  // const newTour=new Tour({})
-  // newTour.save()
-  //use above 2 line to store a new data or just use create method shown below
-  const newTour = await Tour.create(req.body);
-  res.status(201).json({
-    status: 'success',
-    data: {
-      tour: newTour,
-    },
-  });
-});
+// const createNewTour = catchAsyncError(async (req, res, next) => {
+//   // const newTour=new Tour({})
+//   // newTour.save()
+//   //use above 2 line to store a new data or just use create method shown below
+//   const newTour = await Tour.create(req.body);
+//   res.status(201).json({
+//     status: 'success',
+//     data: {
+//       tour: newTour,
+//     },
+//   });
+// });
+
+const createNewTour = factory.createOne(Tour)
 
 // const updateTour = catchAsyncError(async (req, res, next) => {
 //   const updatedTour = await Tour.findByIdAndUpdate(req.params.id, req.body, {

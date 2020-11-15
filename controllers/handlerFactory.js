@@ -1,5 +1,6 @@
 const catchAsyncError = require('./../utils/catchAsyncError')
-const ApiErrors = require('./../utils/apiErrors')
+const ApiErrors = require('./../utils/apiErrors');
+const { Model } = require('mongoose');
 
 
 //  this function will handle all the delete operations for all the different models(Model===>tours,users,reviews)
@@ -33,4 +34,13 @@ exports.updateOne = (Model) => catchAsyncError(async (req, res, next) => {
     });
 })
 
-
+//  this function will handle all the creating operations for all the different models(Model===>tours,users,reviews)
+exports.createOne = (Model) => catchAsyncError(async (req, res, next) => {
+    const newDoc = await Model.create(req.body);
+    res.status(201).json({
+        status: 'success',
+        data: {
+            data: newDoc,
+        },
+    });
+})
