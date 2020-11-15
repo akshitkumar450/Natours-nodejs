@@ -62,6 +62,7 @@ reviewSchema.pre(/^find/, function (next) {
 //  static methods
 //  static methods are avaliable on Model
 //  in static methods this point to Model
+//  we want to cal the averageRating and ratingQty when evr we create  a new  review id added or deleted
 reviewSchema.statics.calcAverageRatings = async function (tourId) {
     // this point to current Model
     const stats = await this.aggregate([
@@ -78,6 +79,7 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
         }
     ])
     // console.log(stats);  // stats is an array 
+    //  updating the Tour document with the stats
     await Tour.findByIdAndUpdate(tourId, {
         ratingsQuantity: stats[0].nRatings,
         ratingsAverage: stats[0].avgRating
