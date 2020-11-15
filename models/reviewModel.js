@@ -40,6 +40,11 @@ const reviewSchema = new mongoose.Schema({
     toObject: { virtuals: true }
 })
 
+//  for preventign duplicate reviews
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true })
+
+
+
 //  query middleware for populating the selected fiedls in O/P
 // without this middleware in getAllreviews Fn there will be only id's of tour and user
 //  but after putting this query middleware selected data of user and tour will be shown
