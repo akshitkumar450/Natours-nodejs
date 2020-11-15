@@ -63,6 +63,7 @@ reviewSchema.pre(/^find/, function (next) {
 //  static methods are avaliable on Model
 //  in static methods this point to Model
 //  we want to cal the averageRating and ratingQty when evr we create  a new  review id added or deleted
+//  only when created  a new review
 reviewSchema.statics.calcAverageRatings = async function (tourId) {
     // this point to current Model
     const stats = await this.aggregate([
@@ -80,10 +81,18 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
     ])
     // console.log(stats);  // stats is an array 
     //  updating the Tour document with the stats
-    await Tour.findByIdAndUpdate(tourId, {
-        ratingsQuantity: stats[0].nRatings,
-        ratingsAverage: stats[0].avgRating
-    })
+    if (stats.length > 0) {
+        await Tour.findByIdAndUpdate(tourId, {
+            ratingsQuantity: stats[0].nRatings,
+            ratingsAverage: stats[0].avgRating
+        })
+    } else {
+        await Tour.findByIdAndUpdate(tourId, {
+            ratingsQuantity: 0,
+            ratingsAverage: 4.5
+        })
+    }
+
 
 }
 // to use the static method
@@ -94,6 +103,20 @@ reviewSchema.post('save', function () {
 
     // Review.calcAverageRatings(this.tour) // Review is not available here
 
+})
+//  for updating and deleting the review   we will use query middleware bcz they findByIDandupdate and delete
+//  in query middleare we dont have access to current Review 
+//  A SMALL TRICK
+
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+    this.R = await this.findOne()
+    console.log(this.R);
+})
+
+//  tranfer this.R from pre to post 
+reviewSchema.post(/^findOneAnd/, async function () {
+    // await this.findOne()-> will not work here ,query is already executed
+    await this.R.constructor.calcAverageRatings(this.R.tour)
 })
 
 
