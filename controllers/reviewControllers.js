@@ -21,6 +21,7 @@ const factory = require('./handlerFactory')
 // })
 const getAllReviews = factory.getAll(Review)
 
+// it is a middleware which will run before  createNewReview
 const setTourUserIds = (req, res, next) => {
 
     // allow nested routes

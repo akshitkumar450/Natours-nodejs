@@ -46,6 +46,7 @@ exports.createOne = (Model) => catchAsyncError(async (req, res, next) => {
     });
 })
 
+//  popOptions is used for populating the tour
 exports.getOne = (Model, popOptions) => catchAsyncError(async (req, res, next) => {
     let query = Model.findById(req.params.id)
     if (popOptions) query = query.populate(popOptions)
