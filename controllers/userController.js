@@ -60,6 +60,16 @@ const deleteMe = catchAsyncError(async (req, res, next) => {
   })
 })
 
+//  middleware for GETME
+const getMe = (req, res, next) => {
+  //  we will use getOne factory fn
+  //  only for currently logged in user and user.id will come from logged in user 
+  // and we have put  req.params.id=req.user.id bcz,, in the getOne fn it uses the req.params.id to find
+  //  basically prefelling the req.params.id by user id
+  req.params.id = req.user.id
+  next()
+}
+
 const getUserById = factory.getOne(User)
 // const getUserById = (req, res) => {
 //   res.status(500).json({
@@ -86,5 +96,6 @@ module.exports = {
   deleteUser,
   updateUser,
   updateMe,
-  deleteMe
+  deleteMe,
+  getMe
 };
