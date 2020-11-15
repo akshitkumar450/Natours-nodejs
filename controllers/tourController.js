@@ -28,29 +28,32 @@ const getAllTour = catchAsyncError(async (req, res, next) => {
   });
 });
 
-const getTourById = catchAsyncError(async (req, res, next) => {
-  // populate method will include the guide fields in tour but only in O/P not in DB
-  // const tour = await Tour.findById(req.params.id).populate({
-  //   path: 'guides',                   // included fields
-  //   select: '-__v -passwordChangedAt'  // excluded fields
-  // })
+// const getTourById = catchAsyncError(async (req, res, next) => {
+//   // populate method will include the guide fields in tour but only in O/P not in DB
+//   // const tour = await Tour.findById(req.params.id).populate({
+//   //   path: 'guides',                   // included fields
+//   //   select: '-__v -passwordChangedAt'  // excluded fields
+//   // })
 
-  //  we have put the above code in query middleware bcz it will run for all find queries
+//   //  we have put the above code in query middleware bcz it will run for all find queries
 
-  const tour = await (await Tour.findById(req.params.id)).populate('reviews')
+//   const tour = await (await Tour.findById(req.params.id)).populate('reviews')
 
-  // const tour = await Tour.findOne({ _id: req.params.id })
+//   // const tour = await Tour.findOne({ _id: req.params.id })
 
-  if (!tour) {
-    return next(new ApiErrors('no tour find at ID', 404));
-  }
-  res.status(200).json({
-    status: 'success',
-    data: {
-      tour: tour,
-    },
-  });
-});
+//   if (!tour) {
+//     return next(new ApiErrors('no tour find at ID', 404));
+//   }
+//   res.status(200).json({
+//     status: 'success',
+//     data: {
+//       tour: tour,
+//     },
+//   });
+// });
+
+
+const getTourById = factory.getOne(Tour, { path: 'reviews' })
 
 // const createNewTour = catchAsyncError(async (req, res, next) => {
 //   // const newTour=new Tour({})

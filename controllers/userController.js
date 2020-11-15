@@ -69,16 +69,18 @@ const deleteMe = catchAsyncError(async (req, res, next) => {
   })
 })
 
-const getUserById = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this method is not done yet',
-  });
-};
+const getUserById = factory.getOne(User)
+// const getUserById = (req, res) => {
+//   res.status(500).json({
+//     status: 'error',
+//     message: 'this method is not done yet',
+//   });
+// };
+
 const createNewUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'this method is not done yet',
+    message: 'this method is not done yet.please usee signup',
   });
 };
 

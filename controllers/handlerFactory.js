@@ -44,3 +44,20 @@ exports.createOne = (Model) => catchAsyncError(async (req, res, next) => {
         },
     });
 })
+
+exports.getOne = (Model, popOptions) => catchAsyncError(async (req, res, next) => {
+    let query = Model.findById(req.params.id)
+    if (popOptions) query = query.populate(popOptions)
+    const doc = await query
+
+    // const doc = await Model.findById(req.params.id).populate('reviews')
+    if (!doc) {
+        return next(new ApiErrors('no document find at ID', 404));
+    }
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: doc,
+        },
+    });
+})

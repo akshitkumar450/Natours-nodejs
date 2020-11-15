@@ -47,7 +47,7 @@ const setTourUserIds = (req, res, next) => {
 //         }
 //     })
 // })
-
+const getReview = factory.getOne(Review)
 const createNewReview = factory.createOne(Review)
 const deleteReview = factory.deleteOne(Review)
 const updateReview = factory.updateOne(Review)
@@ -57,7 +57,8 @@ module.exports = {
     createNewReview,
     deleteReview,
     updateReview,
-    setTourUserIds
+    setTourUserIds,
+    getReview
 }
 
 
