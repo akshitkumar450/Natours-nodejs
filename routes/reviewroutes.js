@@ -8,11 +8,15 @@ const router = express.Router({ mergeParams: true })  // enabling mergeParams->t
 const { getAllReviews, createNewReview, deleteReview, updateReview, setTourUserIds, getReview } = require('./../controllers/reviewControllers')
 const { protect, restrictTo } = require('./../controllers/authControllers')
 
+router.use(protect)
 
 router.get('/', getAllReviews)
-router.post('/', protect, restrictTo('user'), setTourUserIds, createNewReview)
-router.delete('/:id', deleteReview)
-router.patch('/:id', updateReview)
+router.post('/', restrictTo('user'), setTourUserIds, createNewReview)
+
+
+
+router.delete('/:id', restrictTo('admin', 'user'), deleteReview)
+router.patch('/:id', restrictTo('admin', 'user'), updateReview)
 router.get('/:id', getReview)
 
 
