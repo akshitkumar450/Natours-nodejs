@@ -214,6 +214,46 @@ const getToursWithin = catchAsyncError(async (req, res, next) => {
 
 })
 
+//  for calculating distance of all tours from starting point
+
+const getDistances = catchAsyncError(async (req, res, next) => {
+  const { unit, latlng } = req.params
+  const [lat, lng] = latlng.split(',') // by descturing
+  const multiplier = unit === 'mi' ? 0.000621371  /*m*/ : 0.001
+  if (!lat || !lng) {
+    return next(new ApiErrors('please provide latitide and longitude in format '), 400)
+  }
+
+  const distances = await Tour.aggregate([
+    // only stage in geospatial 
+    {
+      //  automaicalyy startLocation  fields index will used in calculations
+      // geoNear should be always first
+      //  but in tourModel we have write a code that will always $match field is added to the pipeline().. so in order to get below code running just comment that code 
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [lng * 1, lat * 1]
+        },
+        distanceField: 'distance',
+        distanceMultiplier: multiplier
+      },
+    },
+    {
+      $project: {
+        distance: 1,
+        name: 1
+      }
+    }
+  ])
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: distances
+    }
+  })
+})
 module.exports = {
   getAllTour,
   getTourById,
@@ -223,5 +263,6 @@ module.exports = {
   aliasTopTous,
   getTourStats,
   getMonthlyPlan,
-  getToursWithin
+  getToursWithin,
+  getDistances
 };

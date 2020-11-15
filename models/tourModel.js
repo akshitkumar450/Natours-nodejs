@@ -223,12 +223,12 @@ tourSchema.post(/^find/, function (docs, next) {
 
 // aggregation middleware
 
-tourSchema.pre('aggregate', function (next) {
-    //  to exclude secretTour from aggregate fn ,we just need to add another method before $match
-    this.pipeline().unshift({ $match: { secretTour: { $ne: true } } })  // this exclude the secretTour from output
-    console.log(this.pipeline()); // this is an array  
-    next()
-})
+// tourSchema.pre('aggregate', function (next) {
+//     //  to exclude secretTour from aggregate fn ,we just need to add another method before $match
+//     this.pipeline().unshift({ $match: { secretTour: { $ne: true } } })  // this exclude the secretTour from output
+//     console.log(this.pipeline()); // this is an array  
+//     next()
+// })
 
 // creating a model for our DB
 const Tour = mongoose.model('Tour', tourSchema)
