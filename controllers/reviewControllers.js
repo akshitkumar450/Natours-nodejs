@@ -39,11 +39,13 @@ const createNewReview = catchAsyncError(async (req, res, next) => {
 })
 
 const deleteReview = factory.deleteOne(Review)
+const updateReview = factory.updateOne(Review)
 
 module.exports = {
     getAllReviews,
     createNewReview,
-    deleteReview
+    deleteReview,
+    updateReview
 }
 
 

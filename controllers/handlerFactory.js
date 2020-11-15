@@ -14,4 +14,23 @@ exports.deleteOne = (Model) => catchAsyncError(async (req, res, next) => {
     });
 })
 
+//  this function will handle all the update operations for all the different models(Model===>tours,users,reviews)
+exports.updateOne = (Model) => catchAsyncError(async (req, res, next) => {
+    const updatedDoc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+    });
+
+    if (!updatedDoc) {
+        return next(new ApiErrors('no tour find at ID', 404));
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: updatedDoc,
+        },
+    });
+})
+
 

@@ -81,12 +81,9 @@ const createNewUser = (req, res) => {
     message: 'this method is not done yet',
   });
 };
-const updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'this method is not done yet',
-  });
-};
+
+//  do not update password with this
+const updateUser = factory.updateOne(User)
 const deleteUser = factory.deleteOne(User)
 
 module.exports = {
