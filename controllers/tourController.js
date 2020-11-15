@@ -187,6 +187,33 @@ const getMonthlyPlan = catchAsyncError(async (req, res, next) => {
   });
 });
 
+// /tours-within/:distance/center/:latlng/unit/:unit
+// /tours-within/233/center/34.111745,-118.113491/unit/mi
+const getToursWithin = catchAsyncError(async (req, res, next) => {
+  const { distance, unit, latlng } = req.params
+  const [lat, lng] = latlng.split(',') // by descturing
+
+  const radius /*(radians )*/ = unit === 'mi' ? distance / 3963.2 /*(radius of earth in miles)*/ : distance / 6378.1  /*(radius of earth in km)*/
+
+  if (!lat || !lng) {
+    return next(new ApiErrors('please provide latitide and longitude in format '), 400)
+  }
+  // console.log(distance, unit, lat, lng);
+
+  // ***geospatial query
+  //  always first as longi and then lati
+  const tours = await Tour.find({ startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } } })
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      data: tours
+    }
+  });
+
+})
+
 module.exports = {
   getAllTour,
   getTourById,
@@ -196,4 +223,5 @@ module.exports = {
   aliasTopTous,
   getTourStats,
   getMonthlyPlan,
+  getToursWithin
 };

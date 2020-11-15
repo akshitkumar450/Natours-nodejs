@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {
-  getAllTour, getTourById, createNewTour, deleteTour, updateTour, aliasTopTous, getTourStats, getMonthlyPlan,
+  getAllTour, getTourById, createNewTour, deleteTour, updateTour, aliasTopTous, getTourStats, getMonthlyPlan, getToursWithin
 } = require('../controllers/tourController');
 
 // to allow only users which are login to see all tours
@@ -28,6 +28,12 @@ router.use('/:tourId/reviews', reviewRouter)
 router.get('/top-5-cheap', aliasTopTous, getAllTour);
 router.get('/tour-stats', getTourStats);
 router.get('/monthly-plan/:year', protect, restrictTo('admin', 'lead-guide', 'guide'), getMonthlyPlan);
+
+// ************geoSpatail queries****************
+
+// /tours-within/:distance/center/:latlng/unit/:unit
+// /tours-within/233/center/34.111745,-118.113491/unit/mi
+router.get('/tours-within/:distance/center/:latlng/unit/:unit', getToursWithin)
 
 //  we have delete protect middleware bcz we want anyone to see all tours
 router.get('/', getAllTour);
