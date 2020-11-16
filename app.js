@@ -9,6 +9,7 @@ const globalErrorHandler = require('./controllers/errorControllers');
 // used to log the request in terminal
 const morgan = require('morgan');
 const hpp = require('hpp')
+const path = require('path')
 
 const tourRouter = require('./routes/toursroutes');
 const userRouter = require('./routes/userroutes');
@@ -18,6 +19,12 @@ const reviewRouter = require('./routes/reviewroutes');
 // if (process.env.NODE_ENV === 'development') {
 //   app.use(morgan('dev'))
 // }
+
+// ******PUG template*****
+app.set('view engine', 'pug')
+// app.set('views',__dirname+'/views')
+app.set('views', path.join(__dirname, 'views'))
+
 
 // security HTTP Headers HELMET MIDDLWARE ,,always on top of routes
 app.use(helmet())
@@ -58,10 +65,17 @@ app.use(hpp({
 }))
 
 
-app.use('/', express.static(__dirname + '/public'));
+// app.use('/', express.static(__dirname + '/public'));
+// app.use('/', express.static(path.join(__dirname, 'public')));
 
 
 //** ROUTERS */
+
+// *** for PUG template***
+app.get('/', (req, res) => {
+  res.status(200).render('base')
+})
+
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
