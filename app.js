@@ -14,6 +14,7 @@ const path = require('path');
 const tourRouter = require('./routes/toursroutes');
 const userRouter = require('./routes/userroutes');
 const reviewRouter = require('./routes/reviewroutes');
+const viewRouter = require('./routes/viewroutes');
 
 //morgan is used to log the request in our terminal
 // if (process.env.NODE_ENV === 'development') {
@@ -69,26 +70,7 @@ app.use(
 
 //** ROUTERS */
 
-// *** for PUG template***
-app.get('/', (req, res) => {
-  res.status(200).render('base', {
-    tour: 'the forest hiker',
-    user: 'nina ',
-  });
-});
-
-app.get('/overview', (req, res) => {
-  res.status(200).render('overview', {
-    title: 'all tours',
-  });
-});
-
-app.get('/tour', (req, res) => {
-  res.status(200).render('tour', {
-    title: 'forest hiker',
-  });
-});
-
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
