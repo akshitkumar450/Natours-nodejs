@@ -25,6 +25,9 @@ app.set('view engine', 'pug')
 // app.set('views',__dirname+'/views')
 app.set('views', path.join(__dirname, 'views'))
 
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 // security HTTP Headers HELMET MIDDLWARE ,,always on top of routes
 app.use(helmet())
@@ -66,14 +69,16 @@ app.use(hpp({
 
 
 // app.use('/', express.static(__dirname + '/public'));
-// app.use('/', express.static(path.join(__dirname, 'public')));
 
 
 //** ROUTERS */
 
 // *** for PUG template***
 app.get('/', (req, res) => {
-  res.status(200).render('base')
+  res.status(200).render('base', {
+    tour: 'the forest hiker',
+    user: 'nina '
+  })
 })
 
 app.use('/api/v1/tours', tourRouter);

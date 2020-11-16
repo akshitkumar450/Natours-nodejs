@@ -1,1 +1,19 @@
-h1 The park camper 
+doctype html
+html
+    head
+        //-  #{tour} will inject the value of tour (interpolation method)
+        title Natours | #{tour}   
+        link(rel='stylesheet' href='css/style.css')
+        link(rel='shortcut icon' type='image/png' href='img/favicon.png')
+        //- <link ref='stylesheet' href='style.css' />
+    
+    body
+        //- buffered code  means this will bring change to o/p
+        h1= tour
+        h2= user.toUpperCase()
+        //- h1 The park camper 
+
+        //-  unbuffered code means it will not chnge the o/p
+        - const x=5;
+        h2= 2*x
+        p This is just some text
