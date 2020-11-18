@@ -1,8 +1,10 @@
 extends base
 //-  when there are repeated code we can use mixins
-
 include _reviewCard
 
+//- block append head
+//-     <!-- this script will be added in the last of head in base.pug-->
+//-     script(src="/js/mapbox.js")
 
 mixin overviewBox(label,text,icon)
     .overview-box__detail
@@ -92,7 +94,9 @@ block content
 
 
     section.section-map
-        #map
+        <!-- in html we can declare data attribute  data-  and then we can use that attribute in JS using dataset. -->
+        <!-- in html we can't use arrays or string ,,so we have converted locations array in string -->
+        #map(data-locations=`${JSON.stringify(tour.locations)}`)
 
     section.section-reviews
         .reviews
