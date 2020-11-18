@@ -14,8 +14,16 @@ exports.getOverView = catchasyn(async (req, res) => {
   });
 });
 
-exports.getTour = (req, res) => {
+exports.getTour = catchasyn(async (req, res) => {
+  // 1) get the data ,for the requested tour (including reviews and guides)
+  const tour = await Tour.findOne({ slug: req.params.slug }).populate({
+    path: 'reviews',
+    fields: 'rating review user',
+  });
+  // 2) build the template
+  // 3) redner the template data from 1)
   res.status(200).render('tour', {
     title: 'forest hiker',
+    tour: tour,
   });
-};
+});
