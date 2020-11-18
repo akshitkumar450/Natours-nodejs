@@ -1,7 +1,7 @@
 const Tour = require('./../models/tourModel');
 const catchasyn = require('./../utils/catchAsyncError');
 
-exports.getOverView = catchasyn(async (req, res) => {
+exports.getOverView = catchasyn(async (req, res, next) => {
   // 1  get tour data from Db
   const tours = await Tour.find();
   // 2 build template
@@ -14,7 +14,7 @@ exports.getOverView = catchasyn(async (req, res) => {
   });
 });
 
-exports.getTour = catchasyn(async (req, res) => {
+exports.getTour = catchasyn(async (req, res, next) => {
   // 1) get the data ,for the requested tour (including reviews and guides)
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
@@ -27,3 +27,9 @@ exports.getTour = catchasyn(async (req, res) => {
     tour: tour,
   });
 });
+
+exports.login = catchasyn(async (req, res, next) => {
+  res.status(200).render('login', {
+    title: 'Log into your account'
+  })
+})

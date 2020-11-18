@@ -34,10 +34,10 @@ locations.forEach(loc => {
     //  add a popup
     new mapboxgl.Popup().setLngLat(loc.coordinates).setHTML(`<p> Day${loc.day} : ${loc.description}</p>`).addTo(map)
 
-    //  extends amao bounsd to include current location
+    //  extends map bounds to include current location
     bounds.extend(loc.coordinates)
 });
-
+//  it zoom to the map to actual fit the markers
 map.fitBounds(bounds, {
     padding: {
         top: 200,
