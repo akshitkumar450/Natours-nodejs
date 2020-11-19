@@ -10,6 +10,7 @@ const globalErrorHandler = require('./controllers/errorControllers');
 const morgan = require('morgan');
 const hpp = require('hpp');
 const path = require('path');
+const cookieParser = require('cookie-parser')
 
 const tourRouter = require('./routes/toursroutes');
 const userRouter = require('./routes/userroutes');
@@ -42,6 +43,11 @@ const Limiter = rateLimit({
 app.use('/api', Limiter);
 
 app.use(express.json({ limit: '10kb' }));
+
+//  it help us to access the cookie in a request
+//  it parses the data from cookie
+app.use(cookieParser())
+
 /*  {
   "email":{"$gt":""},
   "password":"newpass1234"
@@ -67,6 +73,12 @@ app.use(
 );
 
 // app.use('/', express.static(__dirname + '/public'));
+
+// testing middleware
+app.use((req, res, next) => {
+  console.log(req.cookies);
+  next()
+})
 
 //** ROUTERS */
 

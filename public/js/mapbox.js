@@ -6,7 +6,7 @@ console.log('hello mapbox');
 const locations = JSON.parse(document.getElementById('map').dataset.locations)
 console.log(locations);
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoic2FjaGluY2hvZHUwMDEiLCJhIjoiY2tobnBscnR1MGVvMjJyazhuempwaWtuZCJ9.JeSoqNOInvDOs3bQUc79aQ';
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2FjaGluY2hvZHUwMDEiLCJhIjoiY2tiNzJtNXh6MDFydjJwcWx6cDlqbTgycyJ9.928MHTd_sfPmxMzAybLeuw';
 var map = new mapboxgl.Map({
     container: 'map', // here we need an id where we can put our map  so we have #map in tour page so map will be shown there
     style: 'mapbox://styles/sachinchodu001/ckhnq0ynu13dw19lyvtm6i0a5',
@@ -32,6 +32,7 @@ locations.forEach(loc => {
     }).setLngLat(loc.coordinates).addTo(map)
 
     //  add a popup
+    //  loc.day and loc.description has came from locations array 
     new mapboxgl.Popup().setLngLat(loc.coordinates).setHTML(`<p> Day${loc.day} : ${loc.description}</p>`).addTo(map)
 
     //  extends map bounds to include current location
