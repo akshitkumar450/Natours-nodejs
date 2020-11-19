@@ -1,4 +1,7 @@
-const login = async (email, password) => {
+import axios from 'axios'
+import { showAlert } from './alerts'
+
+export const login = async (email, password) => {
     // here we will use http request to get access the login api
     //  using axios
     //  axios will return a promise
@@ -17,7 +20,7 @@ const login = async (email, password) => {
         //  user menu will be shown only by reloading the page afer logging in
         //  so if we are logged in then only it will work
         if (result.data.status === 'success') {
-            alert('logged in successfully ')
+            showAlert('success', 'logged in successfully')
             //  to reload to main page
             window.setTimeout(() => {
                 //  to load other page
@@ -29,15 +32,8 @@ const login = async (email, password) => {
     }
     catch (err) {
         // console.log(err);
-        alert(err.response.data.message);
+        // alert(err.response.data.message);
+        showAlert('error', err.response.data.message)
     }
 }
-
-document.querySelector('.form').addEventListener('submit', (e) => {
-    e.preventDefault()
-    const email = document.getElementById('email').value
-    const password = document.getElementById('password').value
-    login(email, password)
-})
-
 console.log('login');
