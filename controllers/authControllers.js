@@ -224,38 +224,53 @@ const updatePassword = catchAsyncError(async (req, res, next) => {
 
 //  only for render pages ,no error will be there
 //  to check if a user is logged in or not
-const isLoggedIn = catchAsyncError(async (req, res, next) => {
+const isLoggedIn = async (req, res, next) => {
     //  if there is a cookie there is a logged in user
     //  and if there is not a cookie there is not logged in user
 
     //  read a jwt token from a cookie
     if (req.cookies.jwt) {
-        // 1) verifies the token
-        const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET)
+        try {
+            // 1) verifies the token
+            const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET)
 
-        // 2) if user still exists
-        // to check this one we first need t delete the user from DB and afte that check 
-        const freshUser = await User.findById(decoded.id)
-        if (!freshUser) {
+            // 2) if user still exists
+            // to check this one we first need t delete the user from DB and afte that check 
+            const freshUser = await User.findById(decoded.id)
+            if (!freshUser) {
+                return next()
+            }
+
+            // 3)  check if the user changed the password after token was issued 
+            if (freshUser.changedPasswordAfter(decoded.iat)) {
+                return next()
+            }
+
+            // there is a logged in user
+            //  if user if loged in then we want him to access the template
+            //  we have access to user in pug template
+            //  in pug template there must be a place for user
+            //  this user is used in header template
+            res.locals.user = freshUser
             return next()
         }
-
-        // 3)  check if the user changed the password after token was issued 
-        if (freshUser.changedPasswordAfter(decoded.iat)) {
+        catch (err) {
             return next()
         }
-
-        // there is a logged in user
-        //  if user if loged in then we want him to access the template
-        //  we have access to user in pug template
-        //  in pug template there must be a place for user
-        //  this user is used in header template
-        res.locals.user = freshUser
-        return next()
     }
     next()
+}
 
-})
+const logout = (req, res) => {
+    res.cookie('jwt', 'logout', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    })
+    res.status(200).json({
+        status: 'success',
+    })
+}
+
 module.exports = {
     signup,
     login,
@@ -264,6 +279,7 @@ module.exports = {
     forgotPass,
     resetPass,
     updatePassword,
-    isLoggedIn
+    isLoggedIn,
+    logout
 
 }
