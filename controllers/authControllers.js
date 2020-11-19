@@ -221,6 +221,38 @@ const updatePassword = catchAsyncError(async (req, res, next) => {
     sendToken(user, 200, res)
 })
 
+
+//  only for render pages ,no error will be there
+//  to check if a user is logged in or not
+const isLoggedIn = catchAsyncError(async (req, res, next) => {
+    //  read a jwt token from a cookie
+    if (req.cookies.jwt) {
+        // 1) verifies the token
+        const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET)
+
+        // 2) if user still exists
+        // to check this one we first need t delete the user from DB and afte that check 
+        const freshUser = await User.findById(decoded.id)
+        if (!freshUser) {
+            return next()
+        }
+
+        // 3)  check if the user changed the password after token was issued 
+        if (freshUser.changedPasswordAfter(decoded.iat)) {
+            return next()
+        }
+
+        // there is a logged in user
+        //  if user if loged in then we want him to access the template
+        //  we have access to user in pug template
+        //  in pug template there must be a place for user
+
+        res.locals.user = freshUser
+        return next()
+    }
+    next()
+
+})
 module.exports = {
     signup,
     login,
@@ -228,6 +260,7 @@ module.exports = {
     restrictTo,
     forgotPass,
     resetPass,
-    updatePassword
+    updatePassword,
+    isLoggedIn
 
 }

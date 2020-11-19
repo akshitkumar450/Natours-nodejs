@@ -2,7 +2,6 @@ const login = async (email, password) => {
     // here we will use http request to get access the login api
     //  using axios
     //  axios will return a promise
-    console.log(email, password);
     try {
         const result = await axios({
             method: 'POST',
@@ -14,11 +13,19 @@ const login = async (email, password) => {
                 password: password
             }
         })
+
+        if (result.data.status === 'success') {
+            alert('logged in successfully ')
+            window.setTimeout(() => {
+                location.assign('/')
+            }, 1500)
+        }
         console.log(result);
         //  if it login successfully it will produce a jwt token  and a cookie also containing jwt token and this will help to build the complete authentication
     }
     catch (err) {
-        console.log(err);
+        // console.log(err);
+        alert(err.response.data.message);
     }
 }
 
