@@ -225,6 +225,9 @@ const updatePassword = catchAsyncError(async (req, res, next) => {
 //  only for render pages ,no error will be there
 //  to check if a user is logged in or not
 const isLoggedIn = catchAsyncError(async (req, res, next) => {
+    //  if there is a cookie there is a logged in user
+    //  and if there is not a cookie there is not logged in user
+
     //  read a jwt token from a cookie
     if (req.cookies.jwt) {
         // 1) verifies the token
@@ -246,7 +249,7 @@ const isLoggedIn = catchAsyncError(async (req, res, next) => {
         //  if user if loged in then we want him to access the template
         //  we have access to user in pug template
         //  in pug template there must be a place for user
-
+        //  this user is used in header template
         res.locals.user = freshUser
         return next()
     }

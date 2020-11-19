@@ -14,9 +14,13 @@ const login = async (email, password) => {
             }
         })
 
+        //  user menu will be shown only by reloading the page afer logging in
+        //  so if we are logged in then only it will work
         if (result.data.status === 'success') {
             alert('logged in successfully ')
+            //  to reload to main page
             window.setTimeout(() => {
+                //  to load other page
                 location.assign('/')
             }, 1500)
         }
