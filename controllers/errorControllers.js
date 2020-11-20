@@ -1,26 +1,60 @@
 const ApiError = require('../utils/apiErrors');
 
-const errorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
-    error: err,
-    stack: err.stack,
-  });
-};
-const errorProd = (err, res) => {
-  if (err.isOperationError) {
-    res.status(err.statusCode).json({
+const errorDev = (err, req, res) => {
+  // A) API
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(err.statusCode).json({
       status: err.status,
+      error: err,
       message: err.message,
-    });
-  } else {
-    console.error('error 💥');
-    res.status(500).json({
-      status: 'error',
-      message: 'something went wrong',
+      stack: err.stack
     });
   }
+  // B) RENDERED WEBSITE
+  // console.error('ERROR 💥', err);
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: err.message
+  });
+};
+
+const errorProd = (err, req, res) => {
+  // A) API
+  if (req.originalUrl.startsWith('/api')) {
+    // A) Operational, trusted error: send message to client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message
+      });
+    }
+    // B) Programming or other unknown error: don't leak error details
+    // 1) Log error
+    console.error('ERROR 💥', err);
+    // 2) Send generic message
+    return res.status(500).json({
+      status: 'error',
+      message: 'Something went very wrong!'
+    });
+  }
+
+  // B) RENDERED WEBSITE
+  // A) Operational, trusted error: send message to client
+  if (err.isOperational) {
+    console.log(err);
+    return res.status(err.statusCode).render('error', {
+      title: 'Something went wrong!',
+      msg: err.message
+    });
+  }
+  // B) Programming or other unknown error: don't leak error details
+  // 1) Log error
+  console.error('ERROR 💥', err);
+  // 2) Send generic message
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong!',
+    msg: 'Please try again later.'
+  });
 };
 
 // const castErrorDB = (err) => {
@@ -56,9 +90,10 @@ function globalErrorHandler(err, req, res, next) {
 
   if (process.env.NODE_ENV === 'development') {
     // console.log('errororoorororrrrrrrrrrrrr');
-    errorDev(err, res);
+    errorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
+    error.message = err.messageS
     console.log(error, '******');
     // for error handling invalid id
     // if (error.name === 'CastError') error = castErrorDB(error)
@@ -72,7 +107,7 @@ function globalErrorHandler(err, req, res, next) {
 
     if (error.name === 'JsonWebTokenError') error = handleInvalidToken()
     if (error.name === 'TokenExpiredError') error = handleTokenExpire()
-    errorProd(error, res);
+    errorProd(error, req, res);
 
   }
 
