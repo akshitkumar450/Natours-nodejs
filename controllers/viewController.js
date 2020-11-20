@@ -1,4 +1,5 @@
 const Tour = require('./../models/tourModel');
+const User = require('./../models/userModel');
 const catchasyn = require('./../utils/catchAsyncError');
 const ApiError = require('./../utils/apiErrors')
 
@@ -44,5 +45,24 @@ exports.getAccount = catchasyn(async (req, res, next) => {
   res.status(200).render('account', {
     title: 'your account'
   })
+
+})
+
+exports.updateUser = catchasyn(async (req, res, next) => {
+  // id will be coming from the currrent login user
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, {
+    // req.body.name, and req.body.email is coming from the form that we are submitting bcz it haas name field 
+    name: req.body.name,
+    email: req.body.email
+  }, {
+    new: true,
+    runValidators: true
+  })
+  // after changing the data we want to load that page again. with updated user sending to account template
+  res.status(200).render('account', {
+    title: 'your account',
+    user: updatedUser
+  })
+
 
 })

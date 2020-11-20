@@ -43,6 +43,7 @@ const Limiter = rateLimit({
 app.use('/api', Limiter);
 
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }))
 
 //  it help us to access the cookie in a request
 //  it parses the data from cookie
