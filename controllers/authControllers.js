@@ -121,6 +121,7 @@ const protect = catchAsyncError(async (req, res, next) => {
 
     // grant access to PROTECTED ROUTE
     req.user = freshUser
+    req.locals.user = freshUser;
     next()
 
 })
