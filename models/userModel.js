@@ -17,7 +17,10 @@ const userSchema = new mongoose.Schema({
         validate: [validator.isEmail, ' email is not valid ']
     },
     photo: {
-        type: String
+        type: String,
+        //  while creating a new user if the photo field in not present then the default image will be present 
+        //  which can be updated by updateme route
+        default: 'default.jpg'
     },
     password: {
         type: String,

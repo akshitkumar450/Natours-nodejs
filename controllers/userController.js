@@ -54,8 +54,8 @@ const filterObj = (obj, ...allowedFields) => {
 // upadating the  currently authenticated user his-self data
 //  only update name and email
 const updateMe = catchAsyncError(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
+  // console.log(req.file);
+  // console.log(req.body);
   // 1) create a error if user tries to  POST  password data for update
 
   if (req.body.password || req.body.confirmPassword) {
@@ -67,6 +67,8 @@ const updateMe = catchAsyncError(async (req, res, next) => {
 
   // 2) filetered out unwanted fields names that are not allowed to be  updated
   const filtertedBody = filterObj(req.body, 'name', 'email')
+  //  just add the photo to the filterbody 
+  if (req.file) filtertedBody.photo = req.file.filename
 
   // 3) update user document
   const updateUser = await User.findByIdAndUpdate(req.user.id, filtertedBody, {
