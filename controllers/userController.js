@@ -3,7 +3,36 @@ const catchAsyncError = require('./../utils/catchAsyncError');
 const ApiError = require('./../utils/apiErrors');
 const { use } = require('../routes/userroutes');
 const factory = require('./handlerFactory')
+const multer = require('multer')
 
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // cb is a call back fn  in which first parameter is error and second parameter is a path to destination
+    cb(null, 'public/img/users')
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1]
+    // cb is a call back fn  in which first parameter is error and second parameter is a name of file to be made
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`)
+  }
+})
+
+const multerFilter = (req, file, cb) => {
+  //  to check that only images are allowed to get uploaded
+  // mimetype always starts with image if any image is going to upload
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true)
+  } else {
+    cb(new ApiError('not an image,please upload only images', 400), false)
+  }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+})
+
+const uploadUserPhoto = upload.single('photo')
 
 
 const getAllUsers = factory.getAll(User)
@@ -98,5 +127,6 @@ module.exports = {
   updateUser,
   updateMe,
   deleteMe,
-  getMe
+  getMe,
+  uploadUserPhoto
 };
