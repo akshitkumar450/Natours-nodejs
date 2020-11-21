@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { getAllUsers, getUserById, createNewUser, updateUser, deleteUser, updateMe, deleteMe, getMe } =
   require('../controllers/userController');
+const multer = require('multer')
+//  destination folder
+const upload = multer({ dest: 'public/img/users' })
 
 const { signup, login, forgotPass, resetPass, updatePassword, protect, restrictTo, logout } = require('./../controllers/authControllers')
 
@@ -11,12 +14,13 @@ router.get('/logout', logout)
 router.post('/forgetPass', forgotPass)
 router.patch('/resetPass/:token', resetPass)
 
+
 //  ********* protect all routes after this middleware
 router.use(protect)
 // we can define protect middleware at the starting from where we need to use protect middleware or we can put protect middleware in all the routes
 
 router.patch('/updatePass', updatePassword)
-router.patch('/updateMe', updateMe)
+router.patch('/updateMe', upload.single('photo'), updateMe)
 router.delete('/deleteMe', deleteMe)
 router.get('/me', getMe, getUserById)
 

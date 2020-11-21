@@ -25,7 +25,8 @@ const filterObj = (obj, ...allowedFields) => {
 // upadating the  currently authenticated user his-self data
 //  only update name and email
 const updateMe = catchAsyncError(async (req, res, next) => {
-
+  console.log(req.file);
+  console.log(req.body);
   // 1) create a error if user tries to  POST  password data for update
 
   if (req.body.password || req.body.confirmPassword) {
