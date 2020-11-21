@@ -8963,13 +8963,16 @@ if (loginForm) {
 
 if (updateForm) {
   updateForm.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var email = document.getElementById('email').value;
-    var name = document.getElementById('name').value;
-    (0, _update.updateSettings)({
-      name: name,
-      email: email
-    }, 'data');
+    e.preventDefault(); //  we have created multipart form-data
+
+    var form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    console.log(form);
+    (0, _update.updateSettings)(form, 'data'); // const email = document.getElementById('email').value
+    // const name = document.getElementById('name').value
+    // updateSettings({ name, email }, 'data')
   });
 }
 

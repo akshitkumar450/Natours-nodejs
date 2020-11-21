@@ -6,6 +6,8 @@ const factory = require('./handlerFactory')
 const multer = require('multer')
 const sharp = require('sharp')
 
+// if we dont want to use image processing then we can use it else not
+
 // const multerStorage = multer.diskStorage({
 //   destination: (req, file, cb) => {
 //     // cb is a call back fn  in which first parameter is error and second parameter is a path to destination
@@ -74,8 +76,8 @@ const filterObj = (obj, ...allowedFields) => {
 // upadating the  currently authenticated user his-self data
 //  only update name and email
 const updateMe = catchAsyncError(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
+  // console.log(req.file);
+  // console.log(req.body);
   // 1) create a error if user tries to  POST  password data for update
 
   if (req.body.password || req.body.confirmPassword) {
