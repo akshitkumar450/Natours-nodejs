@@ -221,7 +221,7 @@ const getDistances = catchAsyncError(async (req, res, next) => {
   const [lat, lng] = latlng.split(',') // by descturing
   const multiplier = unit === 'mi' ? 0.000621371  /*m*/ : 0.001
   if (!lat || !lng) {
-    return next(new ApiErrors('please provide latitide and longitude in format '), 400)
+    return next(new ApiErrors('please provide latitide and longitude in format ', 400))
   }
 
   const distances = await Tour.aggregate([

@@ -18,6 +18,7 @@ router.use(protect)
 router.patch('/updatePass', updatePassword)
 router.patch('/updateMe', updateMe)
 router.delete('/deleteMe', deleteMe)
+router.get('/me', getMe, getUserById)
 
 //  we want all these to be used by whom...who is logged in and only to admins
 // *********restrict route after this middleware
@@ -29,9 +30,8 @@ router.post('/', protect, createNewUser);
 router.patch('/:id', protect, updateUser);
 router.delete('/:id', protect, deleteUser);
 
-router.get('/me', protect, getMe, getUserById), restrictTo('admin'),
 
-  module.exports = router;
+module.exports = router;
 
 
 

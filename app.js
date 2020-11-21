@@ -92,7 +92,7 @@ app.use('/api/v1/reviews', reviewRouter);
 // if are able to run below code that means the req res cycle is not completes
 
 app.all('*', (req, res, next) => {
-  next(new ApiErrors(`can't access the ${req.originalUrl} `, 404));
+  next(new ApiErrors(`can't access the ${req.originalUrl}`, 404));
 });
 
 // global error handling middleware

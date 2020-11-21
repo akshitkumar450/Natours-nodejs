@@ -26,6 +26,7 @@ if (loginForm) {
         login(email, password)
     })
 }
+
 if (updateForm) {
     updateForm.addEventListener('submit', (e) => {
         e.preventDefault()
@@ -39,6 +40,8 @@ if (userPasswordForm) {
     userPasswordForm.addEventListener('submit', async (e) => {
         e.preventDefault()
         document.querySelector('btn--save-password').textContent = 'updating...'
+        alert('password')
+
         const passwordCurrent = document.getElementById('password-current').value
         const password = document.getElementById('password').value
         const confirmPassword = document.getElementById('password-confirm').value
@@ -51,8 +54,6 @@ if (userPasswordForm) {
         document.getElementById('password-confirm').value = ' '
     })
 }
-
-const
 
 if (logoutBtn) {
     logoutBtn.addEventListener('click', logout)

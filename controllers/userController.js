@@ -29,7 +29,7 @@ const updateMe = catchAsyncError(async (req, res, next) => {
   // 1) create a error if user tries to  POST  password data for update
 
   if (req.body.password || req.body.confirmPassword) {
-    return next(new ApiError('this route is not for password updates.please use /updatePassword'), 400)
+    return next(new ApiError('this route is not for password updates.please use /updatePassword', 400))
   }
 
   //  we can't use save method here bcz we will only update name and email ,but password field is required  which will cause an error

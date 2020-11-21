@@ -8614,6 +8614,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+//  we have changed the funtion so that it can update both name ,email and password
 //  data will be an object for all the data to be updated
 // type will be the data or password
 var updateSettings = /*#__PURE__*/function () {
@@ -8934,12 +8935,17 @@ var _login = require("./login");
 
 var _update = require("./update");
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 console.log('bundle');
 //  DOM elements
 var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.form--login');
 var logoutBtn = document.querySelector('.nav__el--logout');
 var updateForm = document.querySelector('.form-user-data');
+var userPasswordForm = document.querySelector('.form-user-password');
 
 if (mapBox) {
   var locations = JSON.parse(mapBox.dataset.locations);
@@ -8960,8 +8966,54 @@ if (updateForm) {
     e.preventDefault();
     var email = document.getElementById('email').value;
     var name = document.getElementById('name').value;
-    updateData(name, email);
+    (0, _update.updateSettings)({
+      name: name,
+      email: email
+    }, 'data');
   });
+}
+
+if (userPasswordForm) {
+  userPasswordForm.addEventListener('submit', /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(e) {
+      var passwordCurrent, password, confirmPassword;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              e.preventDefault();
+              document.querySelector('btn--save-password').textContent = 'updating...';
+              alert('password');
+              passwordCurrent = document.getElementById('password-current').value;
+              password = document.getElementById('password').value;
+              confirmPassword = document.getElementById('password-confirm').value; //  updateSettings  is a async  fn so we can await it ,,so that we can do some work after that 
+
+              _context.next = 8;
+              return (0, _update.updateSettings)({
+                passwordCurrent: passwordCurrent,
+                password: password,
+                confirmPassword: confirmPassword
+              }, 'password');
+
+            case 8:
+              //  clearing the input fields
+              document.querySelector('btn--save-password').textContent = 'save password';
+              document.getElementById('password-current').value = ' ';
+              document.getElementById('password').value = ' ';
+              document.getElementById('password-confirm').value = ' ';
+
+            case 12:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }());
 }
 
 if (logoutBtn) {
@@ -8995,7 +9047,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50261" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61484" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
