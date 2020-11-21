@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllUsers, getUserById, createNewUser, updateUser, deleteUser, updateMe, deleteMe, getMe, uploadUserPhoto } =
+const { getAllUsers, getUserById, createNewUser, updateUser, deleteUser, updateMe, deleteMe, getMe, uploadUserPhoto, resizePhoto } =
   require('../controllers/userController');
 
 
@@ -18,7 +18,7 @@ router.use(protect)
 // we can define protect middleware at the starting from where we need to use protect middleware or we can put protect middleware in all the routes
 
 router.patch('/updatePass', updatePassword)
-router.patch('/updateMe', uploadUserPhoto, updateMe)
+router.patch('/updateMe', uploadUserPhoto, resizePhoto, updateMe)
 router.delete('/deleteMe', deleteMe)
 router.get('/me', getMe, getUserById)
 

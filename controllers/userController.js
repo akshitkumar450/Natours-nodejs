@@ -4,18 +4,23 @@ const ApiError = require('./../utils/apiErrors');
 const { use } = require('../routes/userroutes');
 const factory = require('./handlerFactory')
 const multer = require('multer')
+const sharp = require('sharp')
 
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // cb is a call back fn  in which first parameter is error and second parameter is a path to destination
-    cb(null, 'public/img/users')
-  },
-  filename: (req, file, cb) => {
-    const ext = file.mimetype.split('/')[1]
-    // cb is a call back fn  in which first parameter is error and second parameter is a name of file to be made
-    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`)
-  }
-})
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     // cb is a call back fn  in which first parameter is error and second parameter is a path to destination
+//     cb(null, 'public/img/users')
+//   },
+//   filename: (req, file, cb) => {
+//     const ext = file.mimetype.split('/')[1]
+//     // cb is a call back fn  in which first parameter is error and second parameter is a name of file to be made
+//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`)
+//   }
+// })
+
+//  with this image will stored in our memory as a buffer
+// bcz doing image processing we dont want to store image in our file system
+const multerStorage = multer.memoryStorage()
 
 const multerFilter = (req, file, cb) => {
   //  to check that only images are allowed to get uploaded
@@ -33,6 +38,21 @@ const upload = multer({
 })
 
 const uploadUserPhoto = upload.single('photo')
+
+//  while doing image processing we need to store the image in memory as a buffer
+// 
+const resizePhoto = (req, res, next) => {
+  // if there is not image to be uploaded
+  if (!req.file) return next()
+  // req.file.buffer it will read the image from the memory which was stored as a buffer
+  //  we want to store the only square images
+  // req.file.filename is not defined bcz we have stored the image as a buffer .
+  //  we can use filename here bcz req.file.filename is not defined here and it has been used in further middleware in updateMe middleware so we have to define it before running that middleware
+  // we have prefilled the filename property on req.file
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`
+  sharp(req.file.buffer).resize(500, 500).toFormat('jpeg').jpeg({ quality: 90 }).toFile(`public/img/users/${req.file.filename}`)
+  next()
+}
 
 
 const getAllUsers = factory.getAll(User)
@@ -54,8 +74,8 @@ const filterObj = (obj, ...allowedFields) => {
 // upadating the  currently authenticated user his-self data
 //  only update name and email
 const updateMe = catchAsyncError(async (req, res, next) => {
-  // console.log(req.file);
-  // console.log(req.body);
+  console.log(req.file);
+  console.log(req.body);
   // 1) create a error if user tries to  POST  password data for update
 
   if (req.body.password || req.body.confirmPassword) {
@@ -130,5 +150,6 @@ module.exports = {
   updateMe,
   deleteMe,
   getMe,
-  uploadUserPhoto
+  uploadUserPhoto,
+  resizePhoto
 };
