@@ -45,7 +45,7 @@ const uploadUserPhoto = upload.single('photo')
 
 //  while doing image processing we need to store the image in memory as a buffer
 // 
-const resizePhoto = async (req, res, next) => {
+const resizePhoto = catchAsyncError(async (req, res, next) => {
   // if there is not image to be uploaded
   if (!req.file) return next()
   // req.file.buffer it will read the image from the memory which was stored as a buffer
@@ -60,7 +60,7 @@ const resizePhoto = async (req, res, next) => {
     .jpeg({ quality: 90 })
     .toFile(`public/img/users/${req.file.filename}`)
   next()
-}
+})
 
 
 const getAllUsers = factory.getAll(User)

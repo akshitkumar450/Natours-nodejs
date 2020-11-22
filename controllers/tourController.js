@@ -39,12 +39,14 @@ const uploadTourImages = upload.fields([
   { name: 'images', maxCount: 3 }
 ])
 
-const resizeTourImages = async (req, res, next) => {
+const resizeTourImages = catchAsyncError(async (req, res, next) => {
   //  if we are having multiple images then req.files are present
   console.log(req.files);
+  //  req.files will be object containing array for different fields name
+  //  if no images to be uploaded
   if (!req.files.imageCover || !req.files.images) return next()
 
-  // 1 process cover image
+  // 1) process cover image
   const imageCoverFileName = `tour-${req.params.id}-${Date.now()}-cover.jpeg`
   await sharp(req.files.imageCover[0].buffer)
     .resize(2000, 1333)
@@ -52,17 +54,27 @@ const resizeTourImages = async (req, res, next) => {
     .jpeg({ quality: 90 })
     .toFile(`public/img/tours/${imageCoverFileName}`)
   //  to read the processed image by updateTour fn
+  //  we have put it on req.body bcz while updating updateTour fn updates the data which is present in req.body
   req.body.imageCover = imageCoverFileName
 
-  // 2 process images in an array
-  // await sharp(req.file.buffer)
-  //   .resize(500, 500)
-  //   .toFormat('jpeg')
-  //   .jpeg({ quality: 90 })
-  //   .toFile(`public/img/users/${req.file.filename}`)
+  // 2) process images in an array
+
+  req.body.images = []
+  //  we have not handled async await correctly bcz we are using it in a callback fn whick will not prevent it for calling next without waiting for result
+  // so we have to use map method which will return a array of promises and on which we can use promise .all
+  await Promise.all(req.files.images.map(async (file, idx) => {
+    const filename = `tour-${req.params.id}-${Date.now()}-${idx + 1}.jpeg`
+    await sharp(file.buffer)
+      .resize(2000, 1333)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/img/tours/${filename}`)
+
+    req.body.images.push(filename)
+  }))
 
   next()
-}
+})
 //  when we have multiple images with same field name
 // upload.array('images',5)
 
