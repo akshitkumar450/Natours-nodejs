@@ -14,6 +14,7 @@ const sharp = require('sharp')
 //     cb(null, 'public/img/users')
 //   },
 //   filename: (req, file, cb) => {
+//      // file is same as  req.file    
 //     const ext = file.mimetype.split('/')[1]
 //     // cb is a call back fn  in which first parameter is error and second parameter is a name of file to be made
 //     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`)
@@ -22,6 +23,7 @@ const sharp = require('sharp')
 
 //  with this image will stored in our memory as a buffer
 // bcz doing image processing we dont want to store image in our file system
+// with this method req.file.filename will not be set
 const multerStorage = multer.memoryStorage()
 
 const multerFilter = (req, file, cb) => {
@@ -52,7 +54,11 @@ const resizePhoto = (req, res, next) => {
   //  we can use filename here bcz req.file.filename is not defined here and it has been used in further middleware in updateMe middleware so we have to define it before running that middleware
   // we have prefilled the filename property on req.file
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`
-  sharp(req.file.buffer).resize(500, 500).toFormat('jpeg').jpeg({ quality: 90 }).toFile(`public/img/users/${req.file.filename}`)
+  sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`)
   next()
 }
 

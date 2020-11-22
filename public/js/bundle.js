@@ -8968,8 +8968,10 @@ if (updateForm) {
     var form = new FormData();
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
-    form.append('photo', document.getElementById('photo').files[0]);
-    console.log(form);
+    form.append('photo', document.getElementById('photo').files[0]); // console.log(form);
+    // form will be an object
+    //  so axios request  will be working fine
+
     (0, _update.updateSettings)(form, 'data'); // const email = document.getElementById('email').value
     // const name = document.getElementById('name').value
     // updateSettings({ name, email }, 'data')
@@ -9050,7 +9052,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62522" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54584" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
