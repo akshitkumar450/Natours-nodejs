@@ -4,6 +4,9 @@ const APIFeatures = require('../utils/apiFeatures');
 const catchAsyncError = require('../utils/catchAsyncError');
 const factory = require('./handlerFactory')
 
+const multer = require('multer')
+const sharp = require('sharp')
+
 // prefilling some properties of req.query
 const aliasTopTous = (req, res, next) => {
   req.query.limit = '5';
@@ -11,6 +14,39 @@ const aliasTopTous = (req, res, next) => {
   req.query.fields = 'name,duration,price';
   next();
 };
+
+const multerStorage = multer.memoryStorage()
+
+const multerFilter = (req, file, cb) => {
+  //  to check that only images are allowed to get uploaded
+  // mimetype always starts with image if any image is going to upload
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true)
+  } else {
+    cb(new ApiError('not an image,please upload only images', 400), false)
+  }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+})
+
+//  it is used when we have mix of number images to be uploaded
+//  and when we have multiple fields name
+const uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 }
+])
+
+const resizeTourImages = (req, res, next) => {
+  //  if we are having multiple images then req.files are present
+  console.log(req.files);
+  next()
+}
+//  when we have multiple images with same field name
+// upload.array('images',5)
+
 
 // const getAllTour = catchAsyncError(async (req, res, next) => {
 //   const features = new APIFeatures(Tour.find(), req.query)
@@ -264,5 +300,7 @@ module.exports = {
   getTourStats,
   getMonthlyPlan,
   getToursWithin,
-  getDistances
+  getDistances,
+  uploadTourImages,
+  resizeTourImages
 };

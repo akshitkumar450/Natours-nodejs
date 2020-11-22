@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   getAllTour, getTourById, createNewTour, deleteTour, updateTour, aliasTopTous, getTourStats, getMonthlyPlan, getToursWithin, getDistances
-} = require('../controllers/tourController');
+  , uploadTourImages, resizeTourImages } = require('../controllers/tourController');
 
 // to allow only users which are login to see all tours
 const { protect, restrictTo } = require('./../controllers/authControllers')
@@ -48,7 +48,7 @@ router.get('/:id', getTourById);
 router.post('/', protect, restrictTo('admin', 'lead-guide'), createNewTour);
 // deleting of the tour cant be done by any ,,only specific person are allowed to delete the tour
 router.delete('/:id', protect, restrictTo('admin', 'lead-guide'), deleteTour);
-router.patch('/:id', protect, restrictTo('admin', 'lead-guide'), updateTour);
+router.patch('/:id', protect, restrictTo('admin', 'lead-guide'), uploadTourImages, resizeTourImages, updateTour);
 
 //  updating,creating and deleting tour can only done by loged in user and admin and lead-guide
 module.exports = router;
