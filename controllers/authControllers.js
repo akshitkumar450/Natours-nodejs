@@ -53,6 +53,8 @@ const signup = catchAsyncError(async (req, res, next) => {
         passwordChangedAt: req.body.passwordChangedAt,
         active: req.body.active // helpful while deleting the document
     })
+    //  so when a new user signup they will get a welcome email
+    //  when they click on this url they will be forward to account page
     const url = `${req.protocol}://${req.get('host')}/me`
     console.log(url);
     await new Email(newUser, url).sendWelcome()
@@ -158,7 +160,7 @@ const forgotPass = catchAsyncError(async (req, res, next) => {
     // we have send the link for reseting the password to user's email(mailtrap)
     const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPass/${resetToken}`
 
-    const message = `forgot your password ? submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\n if you didn't forget your password ,please ignore this email `
+    // const message = `forgot your password ? submit a PATCH request with your new password and passwordConfirm to: ${resetURL}.\n if you didn't forget your password ,please ignore this email `
 
     try {
         // await sendEmail({
@@ -166,6 +168,10 @@ const forgotPass = catchAsyncError(async (req, res, next) => {
         //     subject: 'your password reset token (Valid for 10 min)',
         //     message: message
         // })
+
+        //  sending mail for resetting password
+        await new Email(user, resetURL).passwordReset()
+
         res.status(200).json({
             status: "success",
             message: 'token send to email'

@@ -33,6 +33,7 @@ class Email {
     // using this we can send differnt mail for different
     async send(template, subject) {
         // 1) render HTML based on pug template
+        //  with this we can read the pug  template file (actual path of the file)
         const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
             firstName: this.firstName,
             url: this.url,
@@ -55,6 +56,9 @@ class Email {
 
     async sendWelcome() {
         await this.send('welcome', 'welcome to natours ')
+    }
+    async passwordReset() {
+        await this.send('passwordReset', 'your password reset token (valid for 10 minutes)')
     }
 }
 
