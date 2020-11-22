@@ -30,7 +30,7 @@ class Email {
     }
 
     // send the actual email
-    // using this we can send differnt mail for different purposes
+    // using this we can send differnt mail for different
     async send(template, subject) {
         // 1) render HTML based on pug template
         const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
@@ -49,7 +49,7 @@ class Email {
             text: htmlToText.fromString(html)
         }
         // 3) create a tranport and send email
-        await this.newTransport.sendMail(mailOptions)
+        await this.newTransport().sendMail(mailOptions)
 
     }
 
@@ -84,7 +84,4 @@ const sendEmail = async (options) => {
     // await tranporter.sendMail(mailOptions)
 }
 
-module.exports = {
-    sendEmail,
-    Email
-} 
+module.exports = Email
