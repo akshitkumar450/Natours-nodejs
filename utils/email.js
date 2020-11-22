@@ -22,7 +22,6 @@ class Email {
                     pass: process.env.SENDGRID_PASSWORD
                 }
             })
-            return 1
         }
         return nodemailer.createTransport({
             // by using mailtrap

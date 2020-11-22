@@ -16,6 +16,7 @@ const tourRouter = require('./routes/toursroutes');
 const userRouter = require('./routes/userroutes');
 const reviewRouter = require('./routes/reviewroutes');
 const viewRouter = require('./routes/viewroutes');
+const bookingRouter = require('./routes/bookingRoutes');
 
 //morgan is used to log the request in our terminal
 // if (process.env.NODE_ENV === 'development') {
@@ -87,6 +88,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/booking', bookingRouter);
 
 // handling the routes which are not declared by adding the middleware
 // if are able to run below code that means the req res cycle is not completes
