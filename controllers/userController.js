@@ -45,7 +45,7 @@ const uploadUserPhoto = upload.single('photo')
 
 //  while doing image processing we need to store the image in memory as a buffer
 // 
-const resizePhoto = (req, res, next) => {
+const resizePhoto = async (req, res, next) => {
   // if there is not image to be uploaded
   if (!req.file) return next()
   // req.file.buffer it will read the image from the memory which was stored as a buffer
@@ -54,7 +54,7 @@ const resizePhoto = (req, res, next) => {
   //  we can use filename here bcz req.file.filename is not defined here and it has been used in further middleware in updateMe middleware so we have to define it before running that middleware
   // we have prefilled the filename property on req.file
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`
-  sharp(req.file.buffer)
+  await sharp(req.file.buffer)
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })

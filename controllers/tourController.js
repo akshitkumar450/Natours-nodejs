@@ -39,9 +39,28 @@ const uploadTourImages = upload.fields([
   { name: 'images', maxCount: 3 }
 ])
 
-const resizeTourImages = (req, res, next) => {
+const resizeTourImages = async (req, res, next) => {
   //  if we are having multiple images then req.files are present
   console.log(req.files);
+  if (!req.files.imageCover || !req.files.images) return next()
+
+  // 1 process cover image
+  const imageCoverFileName = `tour-${req.params.id}-${Date.now()}-cover.jpeg`
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${imageCoverFileName}`)
+  //  to read the processed image by updateTour fn
+  req.body.imageCover = imageCoverFileName
+
+  // 2 process images in an array
+  // await sharp(req.file.buffer)
+  //   .resize(500, 500)
+  //   .toFormat('jpeg')
+  //   .jpeg({ quality: 90 })
+  //   .toFile(`public/img/users/${req.file.filename}`)
+
   next()
 }
 //  when we have multiple images with same field name
