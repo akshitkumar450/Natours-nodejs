@@ -93,7 +93,7 @@ function globalErrorHandler(err, req, res, next) {
     errorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
-    error.message = err.messageS
+    error.message = err.message
     console.log(error, '******');
     // for error handling invalid id
     // if (error.name === 'CastError') error = castErrorDB(error)

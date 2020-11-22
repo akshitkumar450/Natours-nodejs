@@ -56,7 +56,7 @@ const signup = catchAsyncError(async (req, res, next) => {
     //  so when a new user signup they will get a welcome email
     //  when they click on this url they will be forward to account page
     const url = `${req.protocol}://${req.get('host')}/me`
-    console.log(url);
+    // console.log(url);
     await new Email(newUser, url).sendWelcome()
 
     sendToken(newUser, 201, res)

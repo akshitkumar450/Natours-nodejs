@@ -15,7 +15,13 @@ class Email {
     // used for sending emails in both dev and prod environent
     newTransport() {
         if (process.env.NODE_ENV === 'production') {
-            // sendgrid
+            return nodemailer.createTransport({
+                service: 'sendGrid',
+                auth: {
+                    user: process.env.SENDGRID_USERNAME,
+                    pass: process.env.SENDGRID_PASSWORD
+                }
+            })
             return 1
         }
         return nodemailer.createTransport({
