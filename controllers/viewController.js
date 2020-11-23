@@ -1,5 +1,6 @@
 const Tour = require('./../models/tourModel');
 const User = require('./../models/userModel');
+const Booking = require('../models/bookingModel');
 const catchasyn = require('./../utils/catchAsyncError');
 const ApiError = require('./../utils/apiErrors')
 
@@ -62,5 +63,26 @@ exports.updateUser = catchasyn(async (req, res, next) => {
   res.status(200).render('account', {
     title: 'your account',
     user: updatedUser
+  })
+})
+
+//  this fn will get all tours booked by a user
+exports.getMyTour = catchasyn(async (req, res, next) => {
+  //  find the bookings with the login user which will  give the tour id with that we will get the tour that are booked
+  // find all the tours that a user has booked
+
+  //  ** we can use virtual populate also**
+
+  // 1) find all bookings
+  const booking = await Booking.find({ user: req.user.id })
+
+  // 2)find tour with returned ids
+  // tourIds is an array of tour id with which user has booked tour
+  const tourIds = booking.map(el => el.tour)
+  // $in will find all the tours with the id in the tourIds array
+  const tours = await Tour.find({ _id: { $in: tourIds } })
+  res.status(200).render('overview', {
+    title: 'my bookings',
+    tours: tours
   })
 })
