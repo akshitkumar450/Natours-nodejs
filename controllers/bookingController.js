@@ -1,6 +1,5 @@
 const Tour = require('../models/tourModel');
 const ApiErrors = require('../utils/apiErrors');
-const APIFeatures = require('../utils/apiFeatures');
 const catchAsyncError = require('../utils/catchAsyncError');
 const factory = require('./handlerFactory')
 
@@ -18,11 +17,12 @@ exports.getCheckOutSession = catchAsyncError(async (req, res, next) => {
         success_url: `${req.protocol}://${req.get('host')}/`,
         cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
         customer_email: req.user.email,
-        client_reference_id: req.user.tourId,
+        client_reference_id: req.params.tourId,
         line_items: [
             {
                 name: `${tour.name} Tour`,
                 description: tour.summary,
+                //  images should be lived images (deployed)
                 images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
                 amount: tour.price * 100,
                 currency: 'usd',
