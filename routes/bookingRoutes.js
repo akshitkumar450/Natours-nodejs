@@ -12,7 +12,7 @@ router.get('/', getAllBooking)
 router.post('/', createBooking)
 router.get('/:id', getBooking)
 router.delete('/:id', deleteBooking)
-router.update('/:id', updateBooking)
+router.patch('/:id', updateBooking)
 
 module.exports = router;
 
