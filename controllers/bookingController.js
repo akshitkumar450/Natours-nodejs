@@ -1,4 +1,5 @@
 const Tour = require('../models/tourModel');
+const Booking = require('../models/bookingModel');
 const ApiErrors = require('../utils/apiErrors');
 const catchAsyncError = require('../utils/catchAsyncError');
 const factory = require('./handlerFactory')
@@ -14,7 +15,7 @@ exports.getCheckOutSession = catchAsyncError(async (req, res, next) => {
     // 2) create checkout session
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
-        success_url: `${req.protocol}://${req.get('host')}/`,
+        success_url: `${req.protocol}://${req.get('host')}/?tour=${req.params.tourId}&user=${req.user.id}&price=${tour.price}`,
         cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
         customer_email: req.user.email,
         client_reference_id: req.params.tourId,
@@ -37,4 +38,16 @@ exports.getCheckOutSession = catchAsyncError(async (req, res, next) => {
         session: session
     })
 
+})
+
+//  when a successful payment is done with stripe we will go to  ${req.protocol}://${req.get('host')}/
+//  we will add this middleware to viewRoutes in getOverview middleware
+exports.createBookingCheckour = catchAsyncError(async (req, res, next) => {
+    //  this is only temporart=y bcz this is less secure 
+    const { tour, price, user } = req.query
+
+    if (!user & !tour & !price) return next()
+    await Booking.create({ tour, user, price })
+    // redirect to ${req.protocol}://${req.get('host')}/
+    res.redirect(req.originalUrl.split('?')[0])
 })

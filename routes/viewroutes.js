@@ -3,14 +3,15 @@ const router = express.Router();
 
 const { getTour, getOverView, loginForm, getAccount, updateUser } = require('./../controllers/viewController');
 const { protect, isLoggedIn } = require('./../controllers/authControllers');
+const { createBookingCheckour } = require('./../controllers/bookingController');
 
 router.get('/me', protect, getAccount);
 router.post('/submit-user-data', protect, updateUser)
 
-router.use(isLoggedIn)
+// router.use(isLoggedIn)
 
-router.get('/', getOverView);
-router.get('/tour/:slug', getTour);
-router.get('/login', loginForm);
+router.get('/', createBookingCheckour, isLoggedIn, getOverView);
+router.get('/tour/:slug', isLoggedIn, getTour);
+router.get('/login', isLoggedIn, loginForm);
 
 module.exports = router;
