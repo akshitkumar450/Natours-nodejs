@@ -41,7 +41,7 @@ const uploadTourImages = upload.fields([
 
 const resizeTourImages = catchAsyncError(async (req, res, next) => {
   //  if we are having multiple images then req.files are present
-  console.log(req.files);
+  // console.log(req.files);
   //  req.files will be object containing array for different fields name
   //  if no images to be uploaded
   if (!req.files.imageCover || !req.files.images) return next()

@@ -214,12 +214,12 @@ tourSchema.pre(/^find/, function (next) {
     this.start = Date.now()
     next()
 })
-tourSchema.post(/^find/, function (docs, next) {
-    //docs-> is all the document that get reutnred from query
-    // console.log(docs);
-    console.log(`query take ${Date.now() - this.start} ms`);
-    next()
-})
+// tourSchema.post(/^find/, function (docs, next) {
+//     //docs-> is all the document that get reutnred from query
+//     // console.log(docs);
+//     console.log(`query take ${Date.now() - this.start} ms`);
+//     next()
+// })
 
 // aggregation middleware
 

@@ -8,9 +8,11 @@ export const updateSettings = async (data, type) => {
     try {
         let url;
         if (type === 'password') {
-            url = 'http://localhost:4000/api/v1/users/updatePass'
+            url = '/api/v1/users/updatePass'
+            // url = 'http://localhost:4000/api/v1/users/updatePass'
         } else {
-            url = 'http://localhost:4000/api/v1/users/updateMe'
+            url = '/api/v1/users/updateMe'
+            // url = 'http://localhost:4000/api/v1/users/updateMe'
         }
 
         const res = await axios({

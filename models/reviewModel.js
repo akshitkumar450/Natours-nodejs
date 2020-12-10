@@ -115,7 +115,7 @@ reviewSchema.post('save', function () {
 
 reviewSchema.pre(/^findOneAnd/, async function (next) {
     this.R = await this.findOne()
-    console.log(this.R);
+    // console.log(this.R);
 })
 
 //  tranfer this.R from pre to post 

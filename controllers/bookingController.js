@@ -26,7 +26,7 @@ exports.getCheckOutSession = catchAsyncError(async (req, res, next) => {
                 //  images should be lived images (deployed)
                 images: [`https://www.natours.dev/img/tours/${tour.imageCover}`],
                 amount: tour.price * 100,
-                currency: 'usd',
+                currency: 'INR',
                 quantity: 1
             }
         ]

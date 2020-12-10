@@ -8,7 +8,8 @@ export const login = async (email, password) => {
     try {
         const result = await axios({
             method: 'POST',
-            url: 'http://localhost:4000/api/v1/users/login',
+            url: '/api/v1/users/login',
+            // url: 'http://localhost:4000/api/v1/users/login',
             //  data to send to the url in body
             //  it will work same as it was working in postman
             data: {
@@ -27,7 +28,7 @@ export const login = async (email, password) => {
                 location.assign('/')
             }, 1500)
         }
-        console.log(result);
+        // console.log(result);
         //  if it login successfully it will produce a jwt token  and a cookie also containing jwt token and this will help to build the complete authentication
     }
     catch (err) {
@@ -36,13 +37,14 @@ export const login = async (email, password) => {
         showAlert('error', err.response.data.message)
     }
 }
-console.log('login');
+// console.log('login');
 
 export const logout = async () => {
     try {
         const res = await axios({
             method: 'GET',
-            url: 'http://localhost:4000/api/v1/users/logout',
+            url: '/api/v1/users/logout',
+            // url: 'http://localhost:4000/api/v1/users/logout',
         })
         if (res.data.status === 'success') location.reload(true) // force reloading  from server not from browser
     }

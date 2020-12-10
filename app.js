@@ -11,6 +11,7 @@ const morgan = require('morgan');
 const hpp = require('hpp');
 const path = require('path');
 const cookieParser = require('cookie-parser')
+const compression = require('compression')
 
 const tourRouter = require('./routes/toursroutes');
 const userRouter = require('./routes/userroutes');
@@ -76,6 +77,7 @@ app.use(
 
 // app.use('/', express.static(__dirname + '/public'));
 
+app.use(compression())
 // testing middleware
 app.use((req, res, next) => {
   // console.log(req.cookies);

@@ -38,7 +38,7 @@ const getTourById = (req, res) => {
 }
 
 const createNewTour = (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     // to make id for new tour 
     const newid = tours[tours.length - 1].id + 1;
     // create new tour
@@ -47,7 +47,7 @@ const createNewTour = (req, res) => {
     // console.log(newTour);
     tours.push(newTour)
     fs.writeFile(__dirname + '/dev-data/data/tours-simple.json', JSON.stringify(tours), (err) => {
-        if (err) return console.log('ERROR 💥');
+        // if (err) return console.log('ERROR 💥');
         res.status(201).json({
             status: 'success',
             data: {
@@ -87,7 +87,7 @@ app.route('/api/v1/tours/:id').get(getTourById).delete(deleteTour)
 
 
 app.listen(3000, () => {
-    console.log('server started');
+    // console.log('server started');
 })
 
 
@@ -120,7 +120,7 @@ userRouter.delete('/:id', deleteUser)
 const getAllTour = async (req, res) => {
     try {
 
-        console.log(req.query);
+        // console.log(req.query);
 
         //**1a  FILTERING */
 
