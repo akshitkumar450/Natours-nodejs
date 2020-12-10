@@ -39,14 +39,14 @@ app.set('views', path.join(__dirname, 'views'));
 
 //  only work for (simple requests) get and post requests
 app.use(cors())
-  / Access - Control - Allow - Origin *
-  // api.natours.com, front-end natours.com
-  // app.use(cors({
-  //   origin: 'https://www.natours.com'
-  // }))
+// / Access - Control - Allow - Origin *
+// api.natours.com, front-end natours.com
+// app.use(cors({
+//   origin: 'https://www.natours.com'
+// }))
 
-  //  work for (non-simple requests),patch,put,delete 
-  app.options('*', cors())
+//  work for (non-simple requests),patch,put,delete 
+app.options('*', cors())
 // app.options('/api/v1/tours/:id', cors());
 
 
