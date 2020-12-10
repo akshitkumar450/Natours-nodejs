@@ -30,10 +30,18 @@ const server = app.listen(port, () => {
 });
 
 // handling  all the unhandled promise rejection in the application
-// process.on('unhandledRejection', (err) => {
-//   console.log(err.name, err.message);
-//   console.log('unhandled rejections shutting down');
-//   server.close(() => {
-//     process.exit(1);
-//   });
-// });
+process.on('unhandledRejection', (err) => {
+  console.log(err.name, err.message);
+  console.log('unhandled rejections shutting down');
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+//  for heroku
+process.on('SIGTERM', () => {
+  console.log('sigterm recieved, shutting down gracefully')
+  server.close(() => {
+    console.log('process terminated')
+  })
+})

@@ -1,5 +1,10 @@
 const express = require('express');
 const app = express();
+
+//  trusting for secure
+//  for req.headers('x-forwarded-proto')
+app.enable('trust proxy')
+
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');

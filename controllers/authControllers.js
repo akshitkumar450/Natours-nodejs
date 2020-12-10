@@ -14,17 +14,18 @@ function signToken(id) {
 }
 
 
-function sendToken(user, statusCode, res) {
+function sendToken(user, statusCode, res, req) {
     const token = signToken(user._id)
 
     const cookieOptions = {
         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXIPIRES_IN * 24 * 60 * 60 * 1000),
         httpOnly: true, // cookie can't be modified by browser
+        secure: req.secure || req.headers['x-forwarded-proto'] === 'https'  // heroku specific
     }
 
-    if (process.env.NODE_ENV === 'production') {
-        cookieOptions.secure = true // cookie will be send only to a encrypted connection  (https)
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //     cookieOptions.secure = true // cookie will be send only to a encrypted connection  (https)
+    // }
 
     // name of cookie, date to be send in cookie
     res.cookie('jwt', token, cookieOptions)
@@ -59,7 +60,7 @@ const signup = catchAsyncError(async (req, res, next) => {
     // console.log(url);
     await new Email(newUser, url).sendWelcome()
 
-    sendToken(newUser, 201, res)
+    sendToken(newUser, 201, res, req)
 })
 
 // for login user
@@ -85,7 +86,7 @@ const login = catchAsyncError(async (req, res, next) => {
         return next(new ApiError('incorrect email or password', 401))
     }
     // 3) if everything is ok ,,send the token to client
-    sendToken(user, 200, res)
+    sendToken(user, 200, res, req)
 
 })
 
@@ -210,7 +211,7 @@ const resetPass = catchAsyncError(async (req, res, next) => {
     // 3) update the changedpassword prop for the user
 
     // 4) log the user in, send JWT
-    sendToken(user, 200, res)
+    sendToken(user, 200, res, req)
 
 })
 
@@ -230,7 +231,7 @@ const updatePassword = catchAsyncError(async (req, res, next) => {
     user.confirmPassword = req.body.confirmPassword
     await user.save()
     // 4) login the user , send JWT 
-    sendToken(user, 200, res)
+    sendToken(user, 200, res.req)
 })
 
 
