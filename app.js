@@ -17,6 +17,7 @@ const hpp = require('hpp');
 const path = require('path');
 const cookieParser = require('cookie-parser')
 const compression = require('compression')
+const cors = require('cors')
 
 const tourRouter = require('./routes/toursroutes');
 const userRouter = require('./routes/userroutes');
@@ -33,6 +34,21 @@ const bookingRouter = require('./routes/bookingRoutes');
 app.set('view engine', 'pug');
 // app.set('views',__dirname+'/views')
 app.set('views', path.join(__dirname, 'views'));
+
+// implement CORS
+
+//  only work for (simple requests) get and post requests
+app.use(cors())
+  / Access - Control - Allow - Origin *
+  // api.natours.com, front-end natours.com
+  // app.use(cors({
+  //   origin: 'https://www.natours.com'
+  // }))
+
+  //  work for (non-simple requests),patch,put,delete 
+  app.options('*', cors())
+// app.options('/api/v1/tours/:id', cors());
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
