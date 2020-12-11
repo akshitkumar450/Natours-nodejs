@@ -3,9 +3,8 @@ const router = express.Router();
 
 const { getTour, getOverView, loginForm, getAccount, updateUser, getMyTour, alerts } = require('./../controllers/viewController');
 const { protect, isLoggedIn } = require('./../controllers/authControllers');
-const { createBookingCheckout } = require('./../controllers/bookingController');
 
-
+//  middleware for showing the message after successful booking
 router.use(alerts)
 
 router.get('/me', protect, getAccount);

@@ -78,6 +78,7 @@ if (bookBtn) {
         bookTour(tourId)
     })
 }
+//  to put alert message on the body after successful booking of tour
 const alertmsg = document.querySelector('body').dataset.alert;
 if (alertmsg) {
     showAlert('success', alertmsg, 20)
