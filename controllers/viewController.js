@@ -88,7 +88,7 @@ exports.getMyTour = catchasyn(async (req, res, next) => {
 })
 
 exports.alerts = (req, res, next) => {
-  //  get the alert form query string and put in the locals so that our pug template can use that 
+  //  get the alert form query string and put in the locals so that our pug template can use that
   const alert = req.query.alert
   if (alert === 'booking') {
     res.locals.alert = 'your booking was successful please check you mail for conformation.if your bookings does\'t show immediately ,please come back later '
