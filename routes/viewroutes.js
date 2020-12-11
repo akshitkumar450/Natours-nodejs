@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const { getTour, getOverView, loginForm, getAccount, updateUser, getMyTour } = require('./../controllers/viewController');
+const { getTour, getOverView, loginForm, getAccount, updateUser, getMyTour, alerts } = require('./../controllers/viewController');
 const { protect, isLoggedIn } = require('./../controllers/authControllers');
 const { createBookingCheckout } = require('./../controllers/bookingController');
+
+
+router.use(alerts)
 
 router.get('/me', protect, getAccount);
 router.post('/submit-user-data', protect, updateUser)

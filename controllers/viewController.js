@@ -86,3 +86,11 @@ exports.getMyTour = catchasyn(async (req, res, next) => {
     tours: tours
   })
 })
+
+exports.alerts = (req, res, next) => {
+  const alert = req.query.alert
+  if (alert === 'booking') {
+    res.locals.alert = 'your booking was successful please check you mail for conformation.if your bookings does\'t show immediately ,please come back later '
+  }
+  next()
+}
