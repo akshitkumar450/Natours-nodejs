@@ -24,6 +24,7 @@ const userRouter = require('./routes/userroutes');
 const reviewRouter = require('./routes/reviewroutes');
 const viewRouter = require('./routes/viewroutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const { webhookCheckout } = require('./controllers/bookingControllers');
 
 //morgan is used to log the request in our terminal
 // if (process.env.NODE_ENV === 'development') {
@@ -63,7 +64,13 @@ const Limiter = rateLimit({
   message: 'too many requests from this IP ,please try again later',
 });
 
-app.use('/api', Limiter);
+app.use('/api', Limiter); 4
+
+//  the body send to webhookcheckout should be in raw form 
+//  so thats why we have added this before our body-parser which will convert our body to json
+//  we need to parse the body in raw format
+app.post('/webhook-checkout', express.raw({ type: 'application/json' }), webhookCheckout)
+
 
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }))
