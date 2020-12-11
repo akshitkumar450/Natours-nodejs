@@ -12,7 +12,7 @@ router.get('/my-tour', protect, getMyTour)
 // router.use(isLoggedIn)
 
 // router.get('/my-tour', isLoggedIn, getOverView);
-router.get('/', createBookingCheckout, isLoggedIn, getOverView);
+router.get('/', isLoggedIn, getOverView);
 router.get('/tour/:slug', isLoggedIn, getTour);
 router.get('/login', isLoggedIn, loginForm);
 
