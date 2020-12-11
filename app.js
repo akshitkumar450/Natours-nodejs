@@ -24,7 +24,7 @@ const userRouter = require('./routes/userroutes');
 const reviewRouter = require('./routes/reviewroutes');
 const viewRouter = require('./routes/viewroutes');
 const bookingRouter = require('./routes/bookingRoutes');
-const { webhookCheckout } = require('./controllers/bookingControllers');
+const { webhookCheckout } = require('./controllers/bookingController');
 
 //morgan is used to log the request in our terminal
 // if (process.env.NODE_ENV === 'development') {
